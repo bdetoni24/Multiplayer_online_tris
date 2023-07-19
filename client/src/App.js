@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Table from './Components/Table.js';
 import RecordTable from'./Components/RecordTable.js';
-import SelectorInitModal from './Components/SelectorInitModal';
+import SelectorInitModal from './Components/SelectorInitModal.js';
+import PlayerDashboard from './Components/PlayerDashboard.js';
 
 export default function App(){
   //variabili e stati
@@ -55,11 +56,12 @@ export default function App(){
     <div>
       {!showModal && <div id="shadow"></div>}
       {!showModal && <SelectorInitModal setShowModal={setShowModal}/>}
-      { <div id="mainDiv" className={showModal ? "blur" : "unblur"}>
+      <div id="mainDiv">
+        <PlayerDashboard/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
         <Table newXWin={newXWin} newOWin={newOWin}/>
-      </div>}
+      </div>
     </div>
     );
 };
