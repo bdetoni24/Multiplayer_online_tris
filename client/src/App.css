@@ -110,7 +110,7 @@ body{
 .floating-heading {
   position: relative;
   animation-name: floating;
-  animation-duration: 2.5s;
+  animation-duration: 2s;
   animation-iteration-count: infinite;
 }
 
@@ -153,6 +153,7 @@ body{
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: red;
+  box-shadow: 100px 100px 50px #00000062;
 }
 
 .modal-header {
