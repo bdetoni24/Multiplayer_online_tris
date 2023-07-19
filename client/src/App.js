@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import ResetButton from './Components/ResetButton.js'
 import Table from './Components/Table.js';
 import RecordTable from'./Components/RecordTable.js';
+import SelectorInitModal from './Components/SelectorInitModal';
 
 export default function App(){
   //variabili e stati
@@ -52,9 +52,9 @@ export default function App(){
 
   return( 
     <div id="mainDiv">
+      <SelectorInitModal/>
       <h1 id="mainTitle">Tris Game</h1>
       <RecordTable xWins={xWin} oWins={oWin}/>
-      <ResetButton resetRecord={resetRecord}/>
       <Table newXWin={newXWin} newOWin={newOWin}/>
     </div>
     );
