@@ -15,6 +15,8 @@ const SelectorInitModal = (props) => {
 
   const handleSubmit = (e) => {
     props.setShowModal(true);
+    
+    document.getElementById("mainDiv").style.filter = "";
   };
 
   useEffect(() => {
