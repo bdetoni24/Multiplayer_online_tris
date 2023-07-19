@@ -17,18 +17,15 @@ const SelectorInitModal = (props) => {
     props.setShowModal(true);
     
     document.getElementById("mainDiv").style.filter = "";
+    
+    document.getElementById("timeBar").style.animationPlayState = "running";
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowModal(true);
-    }, 1000);
-  }, []);
 
   //parte all'avviamento della pagina
   useEffect(() => {
       setShowModal(true);
       document.getElementById("mainDiv").style.filter = "blur(3px)";
+      document.getElementById("timeBar").style.animationPlayState = "paused";
   }, []);
 
 
@@ -40,15 +37,11 @@ const SelectorInitModal = (props) => {
             <h1>Enter nickname</h1>
           </div>
           <div className="modal-body">
-            <form onSubmit={handleSubmit}>
-              <input
-                placeholder="nickname"
-              />
-              <br/>
-              <button type="submit" >Create Party</button>
-              <button type="submit">New Game</button>
-              <button type="submit">Enter a Party</button>
-            </form>
+            <input placeholder="nickname"/>
+            <br/>
+            <button onClick={handleSubmit}>Create Party</button>
+            <button onClick={handleSubmit}>New Game</button>
+            <button onClick={handleSubmit}>Enter a Party</button>
           </div>
         </div>
       )}

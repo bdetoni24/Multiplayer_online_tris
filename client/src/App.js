@@ -57,7 +57,12 @@ export default function App(){
       {!showModal && <div id="shadow"></div>}
       {!showModal && <SelectorInitModal setShowModal={setShowModal}/>}
       <div id="mainDiv" nameClass="blur">
-        <PlayerDashboard/>
+        <div nameClass="player1">
+          <PlayerDashboard/>
+        </div>
+        <div nameClass="player2">
+          <PlayerDashboard/>
+        </div>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
         <Table newXWin={newXWin} newOWin={newOWin}/>
