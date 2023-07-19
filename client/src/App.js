@@ -56,7 +56,7 @@ export default function App(){
     <div>
       {!showModal && <div id="shadow"></div>}
       {!showModal && <SelectorInitModal setShowModal={setShowModal}/>}
-      <div id="mainDiv">
+      <div id="mainDiv" nameClass="blur">
         <PlayerDashboard/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>

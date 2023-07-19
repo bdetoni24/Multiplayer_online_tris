@@ -9,8 +9,8 @@ body{
   text-align: center;
 }
 
-.visible {
-  display: block;
+.blur{
+  filter: blur(5px);
 }
 
 #shadow{
@@ -23,9 +23,6 @@ body{
   margin-top: -100px;
 }
 
-.hidden {
-  display: none;
-}
 
 .x{
   color:red;
@@ -141,7 +138,6 @@ body{
   width: 200px;
   height: 40px;
   margin: 2px;
-  box-shadow: 10px 10px 5px #5a5a5ab2;
   cursor: pointer;
 }
 
@@ -163,7 +159,7 @@ body{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: midnightblue;
+  background-color: rgba(255, 255, 255, 0.5);
   color:white;
   border-radius: 5px;
   border-color: white;
@@ -178,15 +174,18 @@ body{
 /*PLAYER DASHBOARD*/
 #playerDashboard{
   z-index: 3;
-  width: 200px;
+  width: 240px;
   height: 50px;
   background-color: white;
   margin-left: 20px;
+  border-radius: 5px;
 }
 
 #timeBar{
   position: absolute;
-  width: 100px;
+  width: 200px;
   height: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   background-color: green;
 }
