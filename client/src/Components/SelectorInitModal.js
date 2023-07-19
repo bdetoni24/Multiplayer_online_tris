@@ -24,10 +24,24 @@ const SelectorInitModal = () => {
     }, 1000);
   }, []);
 
+  useEffect(() => {
+    window.onload = () => {
+      setShowModal(true);
+      changeBackground();
+    };
+  }, []);
+
+  const changeBackground = () => {
+    document.getElementById("mainDiv").style.opacity = 0.1;
+  };
+
   return (
     <>
       {showModal && (
         <div className="modal">
+          <div className="modal-header">
+            <h1>Modal Title</h1>
+          </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
               <input
