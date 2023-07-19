@@ -107,7 +107,40 @@ body{
   background-color: white;
 }
 
+.floating-heading {
+  position: relative;
+  animation-name: floating;
+  animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes floating {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0, 5px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+
 /*MODAL*/
+.modal button{
+  width: 200px;
+  height: 40px;
+  margin: 2px;
+  box-shadow: 10px 10px 5px #5a5a5ab2;
+}
+
+.modal input{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
 .modal {
   padding-top: 20px;
   padding-bottom: 20px;

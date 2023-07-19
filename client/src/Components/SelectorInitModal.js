@@ -39,15 +39,15 @@ const SelectorInitModal = () => {
     <>
       {showModal && (
         <div className="modal">
-          <div className="modal-header">
-            <h1>Modal Title</h1>
+          <div className="floating-heading">
+            <h1>Enter nickname</h1>
           </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="name"
-                placeholder="Your name"
+                placeholder="nickname"
                 value={input}
                 onChange={handleChange}
               />
