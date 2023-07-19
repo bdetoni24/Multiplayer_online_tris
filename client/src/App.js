@@ -51,11 +51,13 @@ export default function App(){
   } 
 
   return( 
-    <div id="mainDiv">
+    <div>
       <SelectorInitModal/>
-      <h1 id="mainTitle">Tris Game</h1>
-      <RecordTable xWins={xWin} oWins={oWin}/>
-      <Table newXWin={newXWin} newOWin={newOWin}/>
+      <div id="mainDiv">
+        <h1 id="mainTitle">Tris Game</h1>
+        <RecordTable xWins={xWin} oWins={oWin}/>
+        <Table newXWin={newXWin} newOWin={newOWin}/>
+      </div>
     </div>
     );
 };
