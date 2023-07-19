@@ -8,6 +8,7 @@ export default function App(){
   //variabili e stati
   const [xWin,setXWin] = useState(0)
   const [oWin,setOWin] = useState(0)
+  const [showModal,setShowModal] = useState(false)
 
   //funzione post caricamento pagina
   useEffect(() => {
@@ -52,12 +53,13 @@ export default function App(){
 
   return( 
     <div>
-      <SelectorInitModal/>
-      <div id="mainDiv">
+      {!showModal && <div id="shadow"></div>}
+      {!showModal && <SelectorInitModal setShowModal={setShowModal}/>}
+      { <div id="mainDiv" className={showModal ? "blur" : "unblur"}>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
         <Table newXWin={newXWin} newOWin={newOWin}/>
-      </div>
+      </div>}
     </div>
     );
 };
