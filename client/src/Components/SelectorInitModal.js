@@ -26,6 +26,7 @@ const SelectorInitModal = (props) => {
   //parte all'avviamento della pagina
   useEffect(() => {
       setShowModal(true);
+      document.getElementById("mainDiv").style.filter = "blur(3px)";
   }, []);
 
 
