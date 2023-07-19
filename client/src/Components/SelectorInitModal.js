@@ -1,46 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
 
-const SelectorInitModal = () => {
-  const [showModal, setShowModal] = useState(false);
+const SelectorInitModal = ({ onCreateParty, onEnterParty, onNewGame }) => {
+  const [name, setName] = useState("");
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowModal(true);
+    setTimeout(() => {
+      Modal.setAppElement(document.body);
+      Modal.show("selector-init-modal");
     }, 2000);
-
-    return () => clearTimeout(timer);
   }, []);
 
-  const handleCreateParty = () => {
-    // Logica per il pulsante "Create Party"
-  };
-
-  const handleEnterParty = () => {
-    // Logica per il pulsante "Enter Party"
-  };
-
-  const handleFindGame = () => {
-    // Logica per il pulsante "Find Game"
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
   return (
-    <div>
-      {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <input type="text" placeholder="Nome" />
-            <button onClick={handleCreateParty}>Create Party</button>
-            <button onClick={handleEnterParty}>Enter Party</button>
-            <button onClick={handleFindGame}>Find Game</button>
-            <button onClick={closeModal}>Close</button>
-          </div>
-        </div>
-      )}
-    </div>
+    <Modal
+      isOpen={true}
+    >
+      <div className="selector-init-modal">
+        <h1>Select a Party</h1>
+        <form onSubmit={e => e.preventDefault()}>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+          <button onClick={() => onCreateParty(name)}>Create Party</button>
+          <button onClick={() => onEnterParty(name)}>Enter Party</button>
+          <button onClick={() => onNewGame(name)}>New Game</button>
+        </form>
+      </div>
+    </Modal>
   );
 };
 

@@ -109,35 +109,28 @@ body{
 
 /*MODAL*/
 .selector-init-modal {
-  display: none; /* Il modal è nascosto di default */
-  position: fixed;
-  z-index: 9999; /* Z-index alto per farlo apparire sopra a tutto */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5); /* Sfondo semitrasparente */
+  position: relative;
+  width: 400px;
+  height: 200px;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+  display: none;
+  top: 50px;
+  left: 50px;
+  transform: "translate(-50%, -50%)";
 }
 
-.selector-init-modal-content {
-  background-color: #fefefe;
-  margin: 20% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 400px;
+.selector-init-modal h1 {
+  text-align: center;
 }
 
-/* Restituisci la visibilità all'elemento sottostante */
-.selector-init-modal ~ * {
-  pointer-events: none;
-  opacity: 0.5;
+.selector-init-modal form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
-/* Rimuovi l'opacità per l'elemento corrente */
-.selector-init-modal-content,
-.selector-init-modal-content * {
-  pointer-events: auto;
-  opacity: 1;
+.selector-init-modal button {
+  margin: 10px;
 }
