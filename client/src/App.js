@@ -7,6 +7,7 @@ import LocalPlayerDashboard from './Components/LocalPlayerDashboard.js';
 import ExitButton from './Components/ExitButton.js';
 import VersionLabel from './Components/VersionLabel.js';
 import ShadowLayer from './Components/ShadowLayer.js';
+import OpponentPlayerDashBoard from './Components/OpponentPlayerDashBoard.js'
 
 export default function App(){
   //variabili e stati
@@ -72,6 +73,7 @@ export default function App(){
       </div>
       <div id="mainDiv">
         <LocalPlayerDashboard playerName={playerName}/>
+        <OpponentPlayerDashBoard/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
         <Table newXWin={newXWin} newOWin={newOWin}/>

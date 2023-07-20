@@ -1,5 +1,5 @@
 
-export default function PlayerDashboard(props){
+export default function LocalPlayerDashboard(props){
     return(
         <div id="localPlayerDashboard">
             <h6 id="namePlayer">{props.playerName}</h6>

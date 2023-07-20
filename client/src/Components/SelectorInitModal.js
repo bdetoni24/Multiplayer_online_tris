@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 const SelectorInitModal = (props) => {
   const [showModal, setShowModal] = useState(false);
-  const [input, setInput] = useState("");
 
   function handleSubmit(){
     props.setShowModal(true);
@@ -19,11 +18,13 @@ const SelectorInitModal = (props) => {
     document.getElementById("exitButton").style.filter = blurFilter;
     document.getElementById("mainTable").style.filter = blurFilter;
     document.getElementById("localPlayerDashboard").style.filter = blurFilter;
+    document.getElementById("opponentPlayerDashboard").style.filter = blurFilter;
   };
 
   //parte all'avviamento della pagina
   useEffect(() => {
       setShowModal(true);
+      document.getElementById("timeBar").style.animationPlayState = "paused";
       document.getElementById("timeBar").style.animationPlayState = "paused";
       
       const blurFilter = "blur(100px)"
@@ -34,6 +35,7 @@ const SelectorInitModal = (props) => {
       document.getElementById("exitButton").style.filter = blurFilter;
       document.getElementById("mainTable").style.filter = blurFilter;
       document.getElementById("localPlayerDashboard").style.filter = blurFilter;
+      document.getElementById("opponentPlayerDashboard").style.filter = blurFilter;
   }, []);
 
   return (
