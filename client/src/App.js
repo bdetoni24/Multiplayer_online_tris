@@ -17,12 +17,13 @@ export default function App(){
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [playerName,setPlayerName] = useState("player_name")
   const [showLoginModal,setShowLoginModal] = useState(false)
+  const [playerId,setPlayerId] = useState(1);
 
   //funzione post caricamento pagina
   useEffect(() => {
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
-    const savedPlayerId = localStorage.getItem('playerId')
+    const savedPlayerId = parseInt(localStorage.getItem('playerId'),10)
 
     if(savedXWin){
       setXWin(savedXWin)
@@ -30,18 +31,39 @@ export default function App(){
     if(savedOWin){
       setOWin(savedOWin)
     }
-    if(savedPlayerId==-1){
-      //l'utente non è loggato
-      setShowSelectorInitModal(false);
-      setShowLoginModal(true);
-      blurAll();
+    if(savedPlayerId){
+      //se l'id è stato cambiato
+      if(savedPlayerId===-1){
+        //l'utente non è loggato
+        setShowSelectorInitModal(false);
+        setShowLoginModal(true);
+        blurAll();
+        console.log('OK')
+      }
+      else{
+        //l'utente è già loggato
+        setShowSelectorInitModal(true);
+        setShowLoginModal(false);
+        blurAll();
+      }
     }
     else{
-      //l'utente è già loggato
-      setShowSelectorInitModal(true);
-      setShowLoginModal(false);
-      blurAll();
+      //se non è stato salvato nulla
+      if(playerId===-1){
+        //l'utente non è loggato
+        setShowSelectorInitModal(false);
+        setShowLoginModal(true);
+        blurAll();
+      }
+      else{
+        //l'utente è già loggato
+        setShowSelectorInitModal(true);
+        setShowLoginModal(false);
+        blurAll();
+      }
     }
+    console.log("player id: "+savedPlayerId);
+    setPlayerId(savedPlayerId);
     document.getElementById("timeBar").style.animationPlayState = "paused";
     document.getElementById("timeBar").style.animationPlayState = "paused";
   },[]);
@@ -52,16 +74,20 @@ export default function App(){
     setShowSelectorInitModal(false);
   }
 
+  //funzione attivata ad ogni cambio di playerId
+  useEffect(() => {
+    localStorage.setItem('playerId',playerId)
+    console.log('salvataggio di playerId: '+playerId)
+  }, [playerId]);
+
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {
     localStorage.setItem('xWin',xWin)
-    console.log('salvataggio di xWin: '+xWin)
   }, [xWin]);
 
   //funzione attivata ad ogni cambio di valore di 'oWin'
   useEffect(() => {
     localStorage.setItem('oWin',oWin)
-    console.log('salvataggio di oWin: '+oWin)
   }, [oWin]);
 
   //aggiunge una nuova vittoria al team X

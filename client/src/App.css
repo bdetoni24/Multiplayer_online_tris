@@ -130,14 +130,15 @@ body{
   }
 }
 
-.loginModal {
+/*LOGIN MODAL*/
+#loginModal {
   z-index: 5;
   padding-top: 30px;
   padding-bottom: 40px;
   padding-left: 20px;
   padding-right: 20px;
   width: 500px;
-  height: 240px;
+  height: 200px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -146,6 +147,11 @@ body{
   color:white;
   border-radius: 5px;
   border-color: white;
+}
+
+#loginModal input{
+  margin: 5px;
+  padding: 5px;
 }
 
 /*MODAL SELECTOR*/
@@ -401,3 +407,4 @@ a{
   color:gray;
 
 }
+
