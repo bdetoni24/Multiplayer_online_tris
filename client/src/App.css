@@ -182,7 +182,7 @@ body{
 
 
 /*PLAYER DASHBOARD*/
-#playerDashboard{
+#localPlayerDashboard{
   position: absolute;
   z-index: 3;
   width: 220px;
@@ -194,21 +194,21 @@ body{
   text-align: left;
 }
 
-#playerDashboard #namePlayer{
+#localPlayerDashboard #namePlayer{
   margin: 0px;
   padding-top: 10px;
   padding-left: 10px;
   padding-bottom: 10px
 }
 
-#playerDashboard #staticTimeBar{
+#localPlayerDashboard #staticTimeBar{
   width: 200px;
   height: 10px;
   background-color: gray;
   margin-left: 10px;
 }
 
-#playerDashboard #timeBar{
+#localPlayerDashboard #timeBar{
   position: absolute;
   width: 200px;
   height: 10px;

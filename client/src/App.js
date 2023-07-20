@@ -3,10 +3,10 @@ import './App.css';
 import Table from './Components/Table.js';
 import RecordTable from'./Components/RecordTable.js';
 import SelectorInitModal from './Components/SelectorInitModal.js';
-import PlayerDashboard from './Components/PlayerDashboard.js';
+import LocalPlayerDashboard from './Components/LocalPlayerDashboard.js';
 import ExitButton from './Components/ExitButton.js';
 import VersionLabel from './Components/VersionLabel.js';
-import ShadowLayer from './Components/ShadowLayer';
+import ShadowLayer from './Components/ShadowLayer.js';
 
 export default function App(){
   //variabili e stati
@@ -56,6 +56,11 @@ export default function App(){
     setOWin(0)
   } 
 
+  //funzione per gestire il gioco locale
+  function newLocalGameSelected(){
+    //document.getElementById("timeBar").style.animationPlayState = "running";
+  }
+
   return( 
     <div>
       <div id="modal">
@@ -66,7 +71,7 @@ export default function App(){
         <div id="blurDiv3"></div>
       </div>
       <div id="mainDiv">
-        <PlayerDashboard playerName={playerName}/>
+        <LocalPlayerDashboard playerName={playerName}/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
         <Table newXWin={newXWin} newOWin={newOWin}/>
