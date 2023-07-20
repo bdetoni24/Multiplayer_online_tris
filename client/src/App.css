@@ -173,7 +173,7 @@ body{
 #playerDashboard{
   position: absolute;
   z-index: 3;
-  width: 240px;
+  width: 220px;
   height: 50px;
   transform: translate(0px, -80px);
   background-color: rgba(255, 255, 255, 0.7);
@@ -182,39 +182,11 @@ body{
   text-align: left;
 }
 
-#playerDashboard{
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  right: 0;
-  width: 240px;
-  height: 50px;
-  transform: translate(0px, -80px);
-  background-color: rgba(255, 255, 255, 0.7);
-  margin-right: 20px;
-  border-radius: 5px;
-  text-align: left;
-}
-
 #playerDashboard #namePlayer{
   margin: 0px;
   padding-top: 10px;
   padding-left: 10px;
   padding-bottom: 10px
-}
-
-#playerDashboard #namePlayer{
-  margin: 0px;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-bottom: 10px
-}
-
-#playerDashboard #staticTimeBar{
-  width: 200px;
-  height: 10px;
-  background-color: gray;
-  margin-left: 10px;
 }
 
 #playerDashboard #staticTimeBar{
@@ -231,18 +203,6 @@ body{
   margin-left: 10px;
   margin-right: 10px;
   background-color: green;
-  
-  width: 0px;
-  animation: grow 10s linear infinite;
-}
-
-#playerDashboard #timeBar{
-  position: absolute;
-  width: 200px;
-  height: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  background-color: rgb(128, 0, 0);
   
   width: 0px;
   animation: grow 10s linear infinite;

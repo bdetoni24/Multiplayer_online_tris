@@ -20,6 +20,7 @@ const SelectorInitModal = (props) => {
     document.getElementById("versionLabel").style.filter = blurFilter;
     document.getElementById("exitButton").style.filter = blurFilter;
     document.getElementById("mainTable").style.filter = blurFilter;
+    document.getElementById("playerDashboard").style.filter = blurFilter;
   };
 
   //parte all'avviamento della pagina
@@ -27,13 +28,14 @@ const SelectorInitModal = (props) => {
       setShowModal(true);
       document.getElementById("timeBar").style.animationPlayState = "paused";
       
-      const blurFilter = "blur(2px)"
+      const blurFilter = "blur(100px)"
       document.getElementById("mainTitle").style.filter = blurFilter;
       document.getElementById("exitButton").style.filter = blurFilter;
       document.getElementById("recordTable").style.filter = blurFilter;
       document.getElementById("versionLabel").style.filter = blurFilter;
       document.getElementById("exitButton").style.filter = blurFilter;
       document.getElementById("mainTable").style.filter = blurFilter;
+      document.getElementById("playerDashboard").style.filter = blurFilter;
   }, []);
 
   return (
