@@ -24,7 +24,7 @@ const SelectorInitModal = (props) => {
   //parte all'avviamento della pagina
   useEffect(() => {
       setShowModal(true);
-      document.getElementById("mainDiv").style.filter = "blur(3px)";
+      document.getElementById("mainDiv").style.filter = "blur(2px)";
       document.getElementById("timeBar").style.animationPlayState = "paused";
   }, []);
 
