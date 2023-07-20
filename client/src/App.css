@@ -198,35 +198,35 @@ body{
   text-align: left;
 }
 
-#player1Dashboard #namePlayer1{
+#player1Dashboard #namePlayer{
   margin: 0px;
   padding-top: 10px;
   padding-left: 10px;
   padding-bottom: 10px
 }
 
-#player2Dashboard #namePlayer2{
+#player2Dashboard #namePlayer{
   margin: 0px;
   padding-top: 10px;
   padding-left: 10px;
   padding-bottom: 10px
 }
 
-#player1Dashboard #staticTimeBar1{
+#player1Dashboard #staticTimeBar{
   width: 200px;
   height: 10px;
   background-color: gray;
   margin-left: 10px;
 }
 
-#player2Dashboard #staticTimeBar2{
+#player2Dashboard #staticTimeBar{
   width: 200px;
   height: 10px;
   background-color: gray;
   margin-left: 10px;
 }
 
-#player1Dashboard #timeBar1{
+#player1Dashboard #timeBar{
   position: absolute;
   width: 200px;
   height: 10px;
@@ -238,7 +238,7 @@ body{
   animation: grow 10s linear infinite;
 }
 
-#player2Dashboard #timeBar2{
+#player2Dashboard #timeBar{
   position: absolute;
   width: 200px;
   height: 10px;
@@ -257,4 +257,22 @@ body{
   100% {
     width: 200px;
   }
+}
+
+
+
+/*EXIT BUTTON*/
+#exitButton{
+  position: absolute;
+  bottom: 0;
+  margin: 20px;
+}
+
+/*VERSION LABEL*/
+#versionLabel{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: white;
+  margin-right: 20px;
 }

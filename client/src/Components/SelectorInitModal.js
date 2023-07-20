@@ -16,7 +16,7 @@ const SelectorInitModal = (props) => {
   function handleSubmit(){
     props.setShowModal(true);
     document.getElementById("mainDiv").style.filter = "";
-    document.getElementById("timeBar").style.animationPlayState = "running";
+    document.getElementById("timeBar").style.animationPlayState = "paused";
     const name = document.getElementById("inputName").value;
     props.setPlayerName(name);
   };
@@ -24,8 +24,8 @@ const SelectorInitModal = (props) => {
   //parte all'avviamento della pagina
   useEffect(() => {
       setShowModal(true);
-      document.getElementById("mainDiv").style.filter = "blur(2px)";
-      document.getElementById("timeBar").style.animationPlayState = "paused";
+      document.getElementById("mainDiv").style.filter = "blur(1px)";
+      document.getElementById("timeBar").style.animationPlayState = "running";
   }, []);
 
 

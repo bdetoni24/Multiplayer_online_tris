@@ -4,6 +4,8 @@ import Table from './Components/Table.js';
 import RecordTable from'./Components/RecordTable.js';
 import SelectorInitModal from './Components/SelectorInitModal.js';
 import PlayerDashboard from './Components/PlayerDashboard.js';
+import ExitButton from './Components/ExitButton.js';
+import VersionLabel from './Components/VersionLabel.js';
 
 export default function App(){
   //variabili e stati
@@ -62,6 +64,8 @@ export default function App(){
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
         <Table newXWin={newXWin} newOWin={newOWin}/>
+        <ExitButton/>
+        <VersionLabel/>
       </div>
     </div>
     );
