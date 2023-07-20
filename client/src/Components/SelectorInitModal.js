@@ -48,12 +48,18 @@ const SelectorInitModal = (props) => {
           <div className="modal-body">
             <input id="inputName" placeholder="nickname" required/>
             <br/>
-            <button onClick={handleSubmit}>Create Party</button>
             <button onClick={handleSubmit}>New Game</button>
-            <button onClick={handleSubmit}>Enter a Party</button>
+            <button onClick={handleSubmit}>Play Local</button>
+            <div id="partyMenu">
+              <button onClick={handleSubmit}>Enter a Party</button>
+              <button onClick={handleSubmit}>Create Party</button>
+            </div>
           </div>
         </div>
       )}
+      <div>
+        <h2 id="loginLabel">Log In</h2>
+      </div>
     </>
   );
 };

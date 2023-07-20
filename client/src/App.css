@@ -217,7 +217,34 @@ body{
   }
 }
 
+#partyMenu{
+  border: 5px;
+  border-color: red;
+  background-color: red;
+  width: 408px;
+  margin: auto;
+  margin-top: 2px;
+  padding: 2px;
+  animation: color-change 5s linear infinite;
+}
 
+@keyframes color-change {
+  0% {
+    background-color: red;
+  }
+  25% {
+    background-color: orange;
+  }
+  50% {
+    background-color: yellow;
+  }
+  75% {
+    background-color: green;
+  }
+  100% {
+    background-color: red;
+  }
+}
 
 /*EXIT BUTTON*/
 #exitButton{
@@ -312,5 +339,9 @@ a{
     width: 10px;
     height: 10px;
   }
+}
+
+#loginLabel{
+  color:white;
 }
 
