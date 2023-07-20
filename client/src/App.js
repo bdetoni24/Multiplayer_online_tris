@@ -6,6 +6,7 @@ import SelectorInitModal from './Components/SelectorInitModal.js';
 import PlayerDashboard from './Components/PlayerDashboard.js';
 import ExitButton from './Components/ExitButton.js';
 import VersionLabel from './Components/VersionLabel.js';
+import ShadowLayer from './Components/ShadowLayer';
 
 export default function App(){
   //variabili e stati
@@ -13,7 +14,6 @@ export default function App(){
   const [oWin,setOWin] = useState(0)
   const [showModal,setShowModal] = useState(false)
   const [playerName,setPlayerName] = useState("player_name")
-  const playerIdDatabase = 0;
 
   //funzione post caricamento pagina
   useEffect(() => {
@@ -27,12 +27,6 @@ export default function App(){
       setOWin(savedOWin)
     }
   },[]);
-
-  //funzione attivata ad ogni cambio dell'id
-  useEffect(() => {
-    localStorage.setItem('playerIdDatabase',playerIdDatabase)
-    console.log('salvataggio dell id database: '+playerIdDatabase)
-  }, [playerIdDatabase]);
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {
@@ -64,8 +58,10 @@ export default function App(){
 
   return( 
     <div>
-      {!showModal && <div id="shadow"></div>}
-      {!showModal && <SelectorInitModal setShowModal={setShowModal} setPlayerName={setPlayerName}/>}
+      <div id="modal">
+        {!showModal && <ShadowLayer/>}
+        {!showModal && <SelectorInitModal setShowModal={setShowModal} setPlayerName={setPlayerName}/>}
+      </div>
       <div id="mainDiv">
         <PlayerDashboard playerName={playerName}/>
         <h1 id="mainTitle">Tris Game</h1>
