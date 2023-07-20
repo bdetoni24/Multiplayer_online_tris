@@ -20,6 +20,7 @@ export default function App(){
   useEffect(() => {
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
+    const save
 
     if(savedXWin){
       setXWin(savedXWin)
