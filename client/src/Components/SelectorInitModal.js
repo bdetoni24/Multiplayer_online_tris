@@ -15,7 +15,7 @@ const SelectorInitModal = (props) => {
 
     const blurFilter = ""
     document.getElementById("mainTitle").style.filter = blurFilter;
-    document.getElementById("exitButton").style.filter = blurFilter;
+    document.getElementById("exitButton").style.filter = blurFilter; 
     document.getElementById("recordTable").style.filter = blurFilter;
     document.getElementById("versionLabel").style.filter = blurFilter;
     document.getElementById("exitButton").style.filter = blurFilter;
