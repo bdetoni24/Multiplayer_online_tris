@@ -13,12 +13,12 @@ const SelectorInitModal = (props) => {
     setInput(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  function handleSubmit(){
     props.setShowModal(true);
-    
     document.getElementById("mainDiv").style.filter = "";
-    
     document.getElementById("timeBar").style.animationPlayState = "running";
+    const name = document.getElementById("inputName").value;
+    props.setPlayerName(name);
   };
 
   //parte all'avviamento della pagina
@@ -34,10 +34,10 @@ const SelectorInitModal = (props) => {
       {showModal && (
         <div className="modal">
           <div className="floating-heading">
-            <h1>Enter nickname</h1>
+            <h1>Enter nickname:</h1>
           </div>
           <div className="modal-body">
-            <input placeholder="nickname"/>
+            <input id="inputName" placeholder="nickname"/>
             <br/>
             <button onClick={handleSubmit}>Create Party</button>
             <button onClick={handleSubmit}>New Game</button>

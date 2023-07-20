@@ -172,7 +172,7 @@ body{
 }
 
 /*PLAYER DASHBOARD*/
-#playerDashboard{
+#player1Dashboard{
   position: absolute;
   z-index: 3;
   width: 240px;
@@ -181,31 +181,70 @@ body{
   background-color: rgba(255, 255, 255, 0.7);
   margin-left: 20px;
   border-radius: 5px;
-  
   text-align: left;
 }
 
-#namePlayer{
+#player2Dashboard{
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  right: 0;
+  width: 240px;
+  height: 50px;
+  transform: translate(0px, -60px);
+  background-color: rgba(255, 255, 255, 0.7);
+  margin-right: 20px;
+  border-radius: 5px;
+  text-align: left;
+}
+
+#player1Dashboard #namePlayer1{
   margin: 0px;
   padding-top: 10px;
   padding-left: 10px;
   padding-bottom: 10px
 }
 
-#staticTimeBar{
+#player2Dashboard #namePlayer2{
+  margin: 0px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px
+}
+
+#player1Dashboard #staticTimeBar1{
   width: 200px;
   height: 10px;
   background-color: gray;
   margin-left: 10px;
 }
 
-#timeBar{
+#player2Dashboard #staticTimeBar2{
+  width: 200px;
+  height: 10px;
+  background-color: gray;
+  margin-left: 10px;
+}
+
+#player1Dashboard #timeBar1{
   position: absolute;
   width: 200px;
   height: 10px;
   margin-left: 10px;
   margin-right: 10px;
   background-color: green;
+  
+  width: 0px;
+  animation: grow 10s linear infinite;
+}
+
+#player2Dashboard #timeBar2{
+  position: absolute;
+  width: 200px;
+  height: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: rgb(128, 0, 0);
   
   width: 0px;
   animation: grow 10s linear infinite;
@@ -218,17 +257,4 @@ body{
   100% {
     width: 200px;
   }
-}
-
-.player1{
-  background-color: red;
-}
-
-.player2 #playerDashboard{
-  
-  transform: translate(0px, 60px);
-}
-
-.player1 #timeBar{
-  background-color: red;
 }

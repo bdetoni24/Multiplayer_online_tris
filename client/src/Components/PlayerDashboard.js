@@ -1,12 +1,17 @@
 
-export default function PlayerDashboard(){
+export default function PlayerDashboard(props){
     return(
         <div id="playerDashboard">
-            <h6 id="namePlayer">player_name</h6>
-            <div id="timeBar">
-
+            <div id="player1Dashboard">
+                <h6 id="namePlayer1">{props.playerName}</h6>
+                <div id="timeBar1"></div>
+                <div id="staticTimeBar1"></div>
             </div>
-            <div id="staticTimeBar"></div>
+            <div id="player2Dashboard">
+                <h6 id="namePlayer1">player_name2</h6>
+                <div id="timeBar1"></div>
+                <div id="staticTimeBar1"></div>
+            </div>
         </div>
     );
 }

@@ -10,6 +10,7 @@ export default function App(){
   const [xWin,setXWin] = useState(0)
   const [oWin,setOWin] = useState(0)
   const [showModal,setShowModal] = useState(false)
+  const [playerName,setPlayerName] = useState("player_name")
 
   //funzione post caricamento pagina
   useEffect(() => {
@@ -55,14 +56,9 @@ export default function App(){
   return( 
     <div>
       {!showModal && <div id="shadow"></div>}
-      {!showModal && <SelectorInitModal setShowModal={setShowModal}/>}
+      {!showModal && <SelectorInitModal setShowModal={setShowModal} setPlayerName={setPlayerName}/>}
       <div id="mainDiv" nameClass="blur">
-        <div nameClass="player1">
-          <PlayerDashboard/>
-        </div>
-        <div nameClass="player2">
-          <PlayerDashboard/>
-        </div>
+        <PlayerDashboard playerName={playerName}/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
         <Table newXWin={newXWin} newOWin={newOWin}/>
