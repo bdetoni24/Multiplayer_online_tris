@@ -148,7 +148,7 @@ body{
 }
 
 .modal {
-  z-index: 2;
+  z-index: 5;
   padding-top: 30px;
   padding-bottom: 40px;
   padding-left: 20px;
@@ -268,6 +268,11 @@ body{
   margin: 20px;
 }
 
+#exitButton button{
+  width: 100px;
+  height: 30px;
+}
+
 /*VERSION LABEL*/
 #versionLabel{
   position: absolute;
@@ -275,4 +280,8 @@ body{
   right: 0;
   color: white;
   margin-right: 20px;
+}
+
+a{
+  color: white;
 }
