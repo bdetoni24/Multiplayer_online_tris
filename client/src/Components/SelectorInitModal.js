@@ -12,14 +12,29 @@ const SelectorInitModal = (props) => {
     props.setPlayerName(name);
     
     document.querySelector('audio').play();
+
+    const blurFilter = ""
+    document.getElementById("mainTitle").style.filter = blurFilter;
+    document.getElementById("exitButton").style.filter = blurFilter;
+    document.getElementById("recordTable").style.filter = blurFilter;
+    document.getElementById("versionLabel").style.filter = blurFilter;
+    document.getElementById("exitButton").style.filter = blurFilter;
+    document.getElementById("mainTable").style.filter = blurFilter;
   };
 
   //parte all'avviamento della pagina
   useEffect(() => {
       setShowModal(true);
       document.getElementById("timeBar").style.animationPlayState = "paused";
+      
+      const blurFilter = "blur(2px)"
+      document.getElementById("mainTitle").style.filter = blurFilter;
+      document.getElementById("exitButton").style.filter = blurFilter;
+      document.getElementById("recordTable").style.filter = blurFilter;
+      document.getElementById("versionLabel").style.filter = blurFilter;
+      document.getElementById("exitButton").style.filter = blurFilter;
+      document.getElementById("mainTable").style.filter = blurFilter;
   }, []);
-
 
   return (
     <>

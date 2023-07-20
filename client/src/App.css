@@ -284,3 +284,73 @@ body{
 a{
   color: white;
 }
+
+#blurDiv1{
+  filter: blur(10080px); /*100*/
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: purple;
+  animation: pulse 10s ease-in-out forwards infinite;
+  position: absolute;
+  top: -20px;
+  left: -10px;
+  animation-delay: random(0, 2s);
+}
+
+#blurDiv2{
+  filter: blur(80px); /*100*/
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: purple;
+  animation: pulse 20s ease-in-out forwards infinite;
+  position: absolute;
+  bottom: 320px;
+  right: 10px;
+  animation-delay: 10s;
+}
+
+#blurDiv3{
+  filter: blur(80px); /*100*/
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: purple;
+  animation: pulse3 15s ease-in-out forwards infinite;
+  position: absolute;
+  bottom: 0px;
+  left: 10px;
+  animation-delay: 5s;
+}
+
+@keyframes pulse {
+  0% {
+    width: 10px;
+    height: 10px;
+  }
+  50% {
+    width: 200px;
+    height: 200px;
+  }
+  100% {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@keyframes pulse3 {
+  0% {
+    width: 10px;
+    height: 10px;
+  }
+  50% {
+    width: 250px;
+    height: 250px;
+  }
+  100% {
+    width: 10px;
+    height: 10px;
+  }
+}
+

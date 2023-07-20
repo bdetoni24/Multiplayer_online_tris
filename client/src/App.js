@@ -61,6 +61,9 @@ export default function App(){
       <div id="modal">
         {!showModal && <ShadowLayer/>}
         {!showModal && <SelectorInitModal setShowModal={setShowModal} setPlayerName={setPlayerName}/>}
+        <div id="blurDiv1"></div>
+        <div id="blurDiv2"></div>
+        <div id="blurDiv3"></div>
       </div>
       <div id="mainDiv">
         <PlayerDashboard playerName={playerName}/>
