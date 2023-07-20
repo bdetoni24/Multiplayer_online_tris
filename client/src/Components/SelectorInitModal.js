@@ -10,6 +10,8 @@ const SelectorInitModal = (props) => {
     document.getElementById("timeBar").style.animationPlayState = "running";
     const name = document.getElementById("inputName").value;
     props.setPlayerName(name);
+    
+    document.querySelector('audio').play();
   };
 
   //parte all'avviamento della pagina

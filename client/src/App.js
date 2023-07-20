@@ -70,6 +70,11 @@ export default function App(){
         <ExitButton/>
         <VersionLabel/>
       </div>
+      <audio autoplay loop>
+        <source src="Media/music_arcade.mp3" type="audio/mp3"></source>
+        Your browser does not support the audio element.
+      </audio>
+
     </div>
     );
 };
