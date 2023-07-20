@@ -13,6 +13,7 @@ export default function App(){
   const [oWin,setOWin] = useState(0)
   const [showModal,setShowModal] = useState(false)
   const [playerName,setPlayerName] = useState("player_name")
+  const playerIdDatabase = 0;
 
   //funzione post caricamento pagina
   useEffect(() => {
@@ -26,6 +27,12 @@ export default function App(){
       setOWin(savedOWin)
     }
   },[]);
+
+  //funzione attivata ad ogni cambio dell'id
+  useEffect(() => {
+    localStorage.setItem('playerIdDatabase',playerIdDatabase)
+    console.log('salvataggio dell id database: '+playerIdDatabase)
+  }, [playerIdDatabase]);
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {
