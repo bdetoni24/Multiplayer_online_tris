@@ -9,10 +9,6 @@ body{
   text-align: center;
 }
 
-.blur{
-  filter: blur(5px);
-}
-
 #shadow{
   z-index: 1;
   position: absolute;
@@ -30,7 +26,8 @@ body{
 
 #mainDiv{
   z-index: 1;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #rematchButton{
@@ -80,6 +77,7 @@ body{
   border: 1;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 100px;
   font-size: 50px;
   width: 50%;
   height: 50%;
@@ -172,61 +170,61 @@ body{
 }
 
 /*PLAYER DASHBOARD*/
-#player1Dashboard{
+#playerDashboard{
   position: absolute;
   z-index: 3;
   width: 240px;
   height: 50px;
-  transform: translate(0px, -60px);
+  transform: translate(0px, -80px);
   background-color: rgba(255, 255, 255, 0.7);
   margin-left: 20px;
   border-radius: 5px;
   text-align: left;
 }
 
-#player2Dashboard{
+#playerDashboard{
   position: absolute;
   z-index: 3;
   top: 0;
   right: 0;
   width: 240px;
   height: 50px;
-  transform: translate(0px, -60px);
+  transform: translate(0px, -80px);
   background-color: rgba(255, 255, 255, 0.7);
   margin-right: 20px;
   border-radius: 5px;
   text-align: left;
 }
 
-#player1Dashboard #namePlayer{
+#playerDashboard #namePlayer{
   margin: 0px;
   padding-top: 10px;
   padding-left: 10px;
   padding-bottom: 10px
 }
 
-#player2Dashboard #namePlayer{
+#playerDashboard #namePlayer{
   margin: 0px;
   padding-top: 10px;
   padding-left: 10px;
   padding-bottom: 10px
 }
 
-#player1Dashboard #staticTimeBar{
+#playerDashboard #staticTimeBar{
   width: 200px;
   height: 10px;
   background-color: gray;
   margin-left: 10px;
 }
 
-#player2Dashboard #staticTimeBar{
+#playerDashboard #staticTimeBar{
   width: 200px;
   height: 10px;
   background-color: gray;
   margin-left: 10px;
 }
 
-#player1Dashboard #timeBar{
+#playerDashboard #timeBar{
   position: absolute;
   width: 200px;
   height: 10px;
@@ -238,7 +236,7 @@ body{
   animation: grow 10s linear infinite;
 }
 
-#player2Dashboard #timeBar{
+#playerDashboard #timeBar{
   position: absolute;
   width: 200px;
   height: 10px;
@@ -271,6 +269,7 @@ body{
 #exitButton button{
   width: 100px;
   height: 30px;
+  border-radius: 5px;
 }
 
 /*VERSION LABEL*/
