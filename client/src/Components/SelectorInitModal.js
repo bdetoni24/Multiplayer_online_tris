@@ -18,7 +18,7 @@ const SelectorInitModal = (props) => {
     document.getElementById("versionLabel").style.filter = blurFilter;
     document.getElementById("exitButton").style.filter = blurFilter;
     document.getElementById("mainTable").style.filter = blurFilter;
-    document.getElementById("playerDashboard").style.filter = blurFilter;
+    document.getElementById("localPlayerDashboard").style.filter = blurFilter;
   };
 
   //parte all'avviamento della pagina
@@ -33,7 +33,7 @@ const SelectorInitModal = (props) => {
       document.getElementById("versionLabel").style.filter = blurFilter;
       document.getElementById("exitButton").style.filter = blurFilter;
       document.getElementById("mainTable").style.filter = blurFilter;
-      document.getElementById("playerDashboard").style.filter = blurFilter;
+      document.getElementById("localPlayerDashboard").style.filter = blurFilter;
   }, []);
 
   return (
