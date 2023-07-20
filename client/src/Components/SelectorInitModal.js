@@ -8,8 +8,6 @@ const SelectorInitModal = (props) => {
     props.setShowModal(true);
     document.getElementById("mainDiv").style.filter = "";
     document.getElementById("timeBar").style.animationPlayState = "running";
-    const name = document.getElementById("inputName").value;
-    props.setPlayerName(name);
     
     document.querySelector('audio').play();
 
@@ -41,13 +39,11 @@ const SelectorInitModal = (props) => {
   return (
     <>
       {showModal && (
-        <div className="modal">
+        <div className="selectorInitModal">
           <div className="floating-heading">
-            <h1>Enter nickname:</h1>
+            <h1>Hi {props.playerName}!</h1>
           </div>
           <div className="modal-body">
-            <input id="inputName" placeholder="nickname" required/>
-            <br/>
             <button onClick={handleSubmit}>New Game</button>
             <button onClick={handleSubmit}>Play Local</button>
             <div id="partyMenu">
@@ -55,11 +51,12 @@ const SelectorInitModal = (props) => {
               <button onClick={handleSubmit}>Create Party</button>
             </div>
           </div>
+          
+          <div>
+            <h5 id="loginLabel"><u>Log Out</u></h5>
+          </div>
         </div>
       )}
-      <div>
-        <h2 id="loginLabel">Log In</h2>
-      </div>
     </>
   );
 };
