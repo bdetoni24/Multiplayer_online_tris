@@ -34,14 +34,23 @@ export default function App(){
       //l'utente non è loggato
       setShowSelectorInitModal(false);
       setShowLoginModal(true);
+      blurAll();
     }
     else{
       //l'utente è già loggato
       setShowSelectorInitModal(true);
       setShowLoginModal(false);
+      blurAll();
     }
+    document.getElementById("timeBar").style.animationPlayState = "paused";
+    document.getElementById("timeBar").style.animationPlayState = "paused";
   },[]);
 
+  //chiude il selector init modal
+  function closeSelectorInitModal(){
+    unBlurAll();
+    setShowSelectorInitModal(false);
+  }
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {
@@ -76,11 +85,38 @@ export default function App(){
     //document.getElementById("timeBar").style.animationPlayState = "running";
   }
 
+  
+  //toglie il blur a tutto
+  function unBlurAll(){
+    const blurFilter = ""
+    document.getElementById("mainTitle").style.filter = blurFilter;
+    document.getElementById("exitButton").style.filter = blurFilter; 
+    document.getElementById("recordTable").style.filter = blurFilter;
+    document.getElementById("versionLabel").style.filter = blurFilter;
+    document.getElementById("exitButton").style.filter = blurFilter;
+    document.getElementById("mainTable").style.filter = blurFilter;
+    document.getElementById("localPlayerDashboard").style.filter = blurFilter;
+    document.getElementById("opponentPlayerDashboard").style.filter = blurFilter;
+  }
+
+  //mette il blur a tutto
+  function blurAll(){
+    const blurFilter = "blur(100px)"
+    document.getElementById("mainTitle").style.filter = blurFilter;
+    document.getElementById("exitButton").style.filter = blurFilter;
+    document.getElementById("recordTable").style.filter = blurFilter;
+    document.getElementById("versionLabel").style.filter = blurFilter;
+    document.getElementById("exitButton").style.filter = blurFilter;
+    document.getElementById("mainTable").style.filter = blurFilter;
+    document.getElementById("localPlayerDashboard").style.filter = blurFilter;
+    document.getElementById("opponentPlayerDashboard").style.filter = blurFilter;
+  }
+
   return( 
     <div>
       <div id="modal">
         {(showSelectorInitModal || showLoginModal) && <ShadowLayer/>}
-        {showSelectorInitModal && <SelectorInitModal setShowSelectorInitModal={setShowSelectorInitModal} />}
+        {showSelectorInitModal && <SelectorInitModal closeSelectorInitModal={closeSelectorInitModal} />}
         {showLoginModal && <LoginModal setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>
