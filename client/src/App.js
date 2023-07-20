@@ -8,19 +8,21 @@ import ExitButton from './Components/ExitButton.js';
 import VersionLabel from './Components/VersionLabel.js';
 import ShadowLayer from './Components/ShadowLayer.js';
 import OpponentPlayerDashBoard from './Components/OpponentPlayerDashBoard.js'
+import LoginModal from './Components/LoginModal.js';
 
 export default function App(){
   //variabili e stati
   const [xWin,setXWin] = useState(0)
   const [oWin,setOWin] = useState(0)
-  const [showModal,setShowModal] = useState(false)
+  const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [playerName,setPlayerName] = useState("player_name")
+  const [showLoginModal,setShowLoginModal] = useState(false)
 
   //funzione post caricamento pagina
   useEffect(() => {
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
-    const save
+    const savedPlayerId = localStorage.getItem('playerId')
 
     if(savedXWin){
       setXWin(savedXWin)
@@ -28,7 +30,18 @@ export default function App(){
     if(savedOWin){
       setOWin(savedOWin)
     }
+    if(savedPlayerId==-1){
+      //l'utente non è loggato
+      setShowSelectorInitModal(false);
+      setShowLoginModal(true);
+    }
+    else{
+      //l'utente è già loggato
+      setShowSelectorInitModal(true);
+      setShowLoginModal(false);
+    }
   },[]);
+
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {
@@ -66,8 +79,9 @@ export default function App(){
   return( 
     <div>
       <div id="modal">
-        {!showModal && <ShadowLayer/>}
-        {!showModal && <SelectorInitModal setShowModal={setShowModal} setPlayerName={setPlayerName}/>}
+        {(showSelectorInitModal || showLoginModal) && <ShadowLayer/>}
+        {showSelectorInitModal && <SelectorInitModal setShowSelectorInitModal={setShowSelectorInitModal} />}
+        {showLoginModal && <LoginModal setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>
         <div id="blurDiv3"></div>

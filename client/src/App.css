@@ -392,7 +392,12 @@ a{
   }
 }
 
-#loginLabel{
+#logOutLabel{
   color:white;
+  cursor: pointer;
+}
+
+#logOutLabel:hover{
+  color:gray;
 }
 
