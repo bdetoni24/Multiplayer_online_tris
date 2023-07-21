@@ -1,15 +1,16 @@
 const express = require('express');
+const sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 const path = require('path');
 var cors = require('cors');
-const { Sequelize, DataTypes } = require('sequelize');
 const port = 5000;
 const app = express();
 
 // creazione istanza del database
-const sequelizeDB = new sequelize('database-name', 'username', 'password', {
+const sequelizeDB = new Sequelize('database_tris', 'root', '', {
   host: 'localhost',
   port: 3306,
-  dialect: 'mysql',
+  dialect: 'mariadb',
 });
 
 /*API necessarie
@@ -28,27 +29,19 @@ app.use(cors());
 // Imposta la cartella di build del progetto React
 app.use(express.static(path.join(__dirname,'main-react-app', 'build')));
 
-//controlla se è presente un username
-app.get('/api/checkUsername/:username', async (req, res) => {
-  console.log("activation of:  /api/checkUsername/:username");
-  const { username } = req.params;
-
-  try {
-    const player = await Players.findOne({ where: { nickname: username } });
-    const exists = !!player; // Converti il risultato in un booleano
-    res.json({ exists });
-  } catch (error) {
-    console.error('Errore durante la ricerca dell\'username:', error);
-    res.status(500).json({ error: 'Errore del server' });
-  }
-});
-
-app.get('/test', (req, res) => {
+app.get('/', (req, res) => {
   console.log("connection...");
-  res.send('Hello from Express!');
+  const players = sequelizeDB.query('SELECT * FROM players');
+  res.json(players);
 });
 
 // Avvia il server sulla porta desiderata
 app.listen(port, function() {
   console.log('Server Express avviato sulla porta '+port);
+  try {
+    sequelizeDB.authenticate();
+    console.log('Connection with the databasehas been established successfully.');
+  } catch (error) {
+    console.log('Unable to connect to the database:');
+  }
 });
