@@ -15,15 +15,17 @@ export default function App(){
   const [xWin,setXWin] = useState(0)
   const [oWin,setOWin] = useState(0)
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
-  const [playerName,setPlayerName] = useState("player_name")
   const [showLoginModal,setShowLoginModal] = useState(false)
-  const [playerId,setPlayerId] = useState(-1);
+  const [localPlayerId,setLocalPlayerId] = useState(-1);
+  const [localPlayerName,setLocalPlayerName] = useState("player_name")
+  const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
+  const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
 
   //funzione post caricamento pagina
   useEffect(() => {
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
-    const savedPlayerId = parseInt(localStorage.getItem('playerId'),10)
+    const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
 
     if(savedXWin){
       setXWin(savedXWin)
@@ -31,25 +33,26 @@ export default function App(){
     if(savedOWin){
       setOWin(savedOWin)
     }
-    if(savedPlayerId){
+    if(savedLocalPlayerId){
       //se l'id è stato cambiato
-      if(savedPlayerId===-1){
+      if(savedLocalPlayerId===-1){
         //l'utente non è loggato
         setShowSelectorInitModal(false);
         setShowLoginModal(true);
         blurAll();
-        console.log('OK')
+        console.log('not logged')
       }
       else{
         //l'utente è già loggato
         setShowSelectorInitModal(true);
         setShowLoginModal(false);
         blurAll();
+        console.log('logged')
       }
     }
     else{
       //se non è stato salvato nulla
-      if(playerId===-1){
+      if(localPlayerId===-1){
         //l'utente non è loggato
         setShowSelectorInitModal(false);
         setShowLoginModal(true);
@@ -62,8 +65,8 @@ export default function App(){
         blurAll();
       }
     }
-    console.log("player id: "+savedPlayerId);
-    setPlayerId(savedPlayerId);
+    console.log("player id: "+savedLocalPlayerId);
+    setLocalPlayerId(savedLocalPlayerId);
     document.getElementById("timeBar").style.animationPlayState = "paused";
     document.getElementById("timeBar").style.animationPlayState = "paused";
   },[]);
@@ -76,9 +79,9 @@ export default function App(){
 
   //funzione attivata ad ogni cambio di playerId
   useEffect(() => {
-    localStorage.setItem('playerId',playerId)
-    console.log('salvataggio di playerId: '+playerId)
-  }, [playerId]);
+    localStorage.setItem('localPlayerId',localPlayerId)
+    console.log('salvataggio di localPlayerId: '+localPlayerId)
+  }, [localPlayerId]);
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {
@@ -149,8 +152,8 @@ export default function App(){
         <div id="blurDiv3"></div>
       </div>
       <div id="mainDiv">
-        <LocalPlayerDashboard playerName={playerName}/>
-        <OpponentPlayerDashBoard/>
+        <LocalPlayerDashboard localPlayerName={localPlayerName}/>
+        <OpponentPlayerDashBoard opponentPlayerName={opponentPlayerName}/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
         <Table newXWin={newXWin} newOWin={newOWin}/>
