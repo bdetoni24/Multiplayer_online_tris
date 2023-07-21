@@ -17,7 +17,7 @@ export default function App(){
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [playerName,setPlayerName] = useState("player_name")
   const [showLoginModal,setShowLoginModal] = useState(false)
-  const [playerId,setPlayerId] = useState(1);
+  const [playerId,setPlayerId] = useState(-1);
 
   //funzione post caricamento pagina
   useEffect(() => {

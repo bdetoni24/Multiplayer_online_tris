@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2023 at 10:58 AM
+-- Generation Time: Jul 21, 2023 at 08:54 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -65,8 +65,17 @@ CREATE TABLE `matches` (
 CREATE TABLE `players` (
   `player_id` int(11) NOT NULL COMMENT 'Player''s primary key',
   `nickname` text NOT NULL COMMENT 'Player''s nickname',
-  `match_id` int(11) DEFAULT NULL COMMENT 'This parameter shows in witch match the player are in. If the parameter is empty means the player isn''t in a match yet.'
+  `password` text NOT NULL COMMENT 'it''s the user password',
+  `match_id` int(11) DEFAULT NULL COMMENT 'This parameter shows in witch match the player are in. If the parameter is empty means the player isn''t in a match yet.',
+  `isOnline` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'this value check if the player wants to join an online match'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Represents registered players in the system. Each player has';
+
+--
+-- Dumping data for table `players`
+--
+
+INSERT INTO `players` (`player_id`, `nickname`, `password`, `match_id`, `isOnline`) VALUES
+(1, 'admin', '1234', NULL, 0);
 
 --
 -- Indexes for dumped tables
@@ -124,7 +133,7 @@ ALTER TABLE `matches`
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `player_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Player''s primary key';
+  MODIFY `player_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Player''s primary key', AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
