@@ -10,7 +10,7 @@ const app = express();
 const sequelizeDB = new Sequelize('database_tris', 'root', '', {
   host: 'localhost',
   port: 3306,
-  dialect: 'mariadb',
+  dialect: 'mysql',
 });
 
 /*API necessarie
