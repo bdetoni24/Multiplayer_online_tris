@@ -17,7 +17,7 @@ export default function App(){
   const [oWin,setOWin] = useState(0)
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [showLoginModal,setShowLoginModal] = useState(false)
-  const [localPlayerId,setLocalPlayerId] = useState(-1);
+  let [localPlayerId,setLocalPlayerId] = useState(-1); //ERRORE
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
@@ -28,7 +28,6 @@ export default function App(){
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
     const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
-
     
     console.log("savedPlayer id: "+savedLocalPlayerId);
 
@@ -42,6 +41,7 @@ export default function App(){
       //la variabile non è nulla (qualcosa prima è stato salvato)
       console.log("-salvato local player");
       setLocalPlayerId(savedLocalPlayerId);
+      localPlayerId = savedLocalPlayerId
       console.log("-localPlayerId: "+localPlayerId);
     }
 
