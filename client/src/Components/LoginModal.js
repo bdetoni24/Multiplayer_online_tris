@@ -6,17 +6,23 @@ export default function(){ //posso implementare la password
     const [isPasswordPresent,setIsPasswordPresent] = useState(true)
     const baseUrl = "http://localhost:5000/"
 
+    
+
     async function addNewPlayerApi(){
         const nickname = document.querySelector('input[name="nickname"]').value;
         const password = 1234;
-        const match_id = -1;
+        const match_id = 1;
         const is_online = 0;
         try{
-            const response = await axios.post('http://localhost:500/api/players/addPlayer', {
-                nickname: nickname,
-                password: password,
-                match_id: match_id,
-                is_online: is_online,
+            const response = await axios({
+                method: 'post',
+                url: 'http://localhost:5000/api/players/addPlayer', 
+                data:{
+                    "nickname": nickname,
+                    "password": password,
+                    "match_id": match_id,
+                    "is_online": is_online,
+                }
             });
             console.log('nuovo giocatore:', response.data);
         }

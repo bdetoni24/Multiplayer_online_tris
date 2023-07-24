@@ -5,7 +5,7 @@ const path = require('path');
 var cors = require('cors');
 const port = 5000;
 const app = express();
-const axios = require('axios').default;
+app.use(express.json());
 
 // creazione istanza del database
 const sequelizeDB = new Sequelize('database_tris', 'root', '', {
@@ -14,6 +14,7 @@ const sequelizeDB = new Sequelize('database_tris', 'root', '', {
   dialect: 'mysql',
 });
 
+app.use(express.urlencoded({ extended: true }));
 //inizializazzione di cors
 app.use(cors({
   origin: '*',
@@ -63,12 +64,11 @@ app.get('/api/players', async (req, res) => {
 
 //aggiunge un nuovo record player
 app.post('/api/players/addPlayer', async (req, res) => {
-  const { nickname, password, match_id, isOnline } = req.body;
-
+  const { nickname, password, match_id, is_online } = req.body;
   try {
     console.log('nickname: '+nickname);
     const newPlayer = await Player.create({
-      nickname:nickname,
+      nickname: nickname,
       password:password,
       match_id:match_id,
       is_online: is_online,
