@@ -14,6 +14,7 @@ const sequelizeDB = new Sequelize('database_tris', 'root', '', {
   dialect: 'mysql',
 });
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //inizializazzione di cors
 app.use(cors({
@@ -74,8 +75,11 @@ app.post('/api/players/addPlayer', async (req, res) => {
       is_online: is_online,
     });
 
+    const newPlayerId = newPlayer.player_id;
+    console.log('id new player: '+newPlayerId);
+
     // Ritorna il nuovo giocatore appena creato come risposta
-    res.status(201).json(newPlayer);
+    res.status(201).json(newPlayerId);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Errore del server' });
@@ -102,24 +106,9 @@ app.get('/api/players/:playerId', async (req, res) => {
   }
 });
 
-/*API necessarie
-  -riprendere lo status delle celle
-  -riprendere il punteggio di x
-  -riprendere il punteggio di y
-  -modificare una cella
-  -restituire un giocatore libero per matchare
-  -new match in game
-
-*/
-
 // Imposta la cartella di build del progetto React
 app.use(express.static(path.join(__dirname,'main-react-app', 'build')));
 
-app.get('/', (req, res) => {
-  console.log("connection...");
-  const players = sequelizeDB.query('SELECT * FROM players');
-  res.json(players);
-});
 
 // Avvia il server sulla porta desiderata
 app.listen(port, function() {

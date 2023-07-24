@@ -28,14 +28,19 @@ export default function App(){
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
     const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
 
+    
+    console.log("savedPlayer id: "+savedLocalPlayerId);
+
     if(savedXWin){
       setXWin(savedXWin)
     }
     if(savedOWin){
       setOWin(savedOWin)
     }
-    if(savedLocalPlayerId){
+    if(!(savedLocalPlayerId==-1)){
       //se l'id è stato cambiato
+      console.log("LOGGATO");
+      setLocalPlayerId(savedLocalPlayerId);
       if(savedLocalPlayerId===-1){
         //l'utente non è loggato
         setShowSelectorInitModal(false);
@@ -48,12 +53,12 @@ export default function App(){
         setShowSelectorInitModal(true);
         setShowLoginModal(false);
         blurAll();
-        console.log('logged, localPlayerId: '+localPlayerId)
         getLocalPlayerNameApi(parseInt(localPlayerId,10));
       }
     }
     else{
       //se non è stato salvato nulla
+      console.log("NON LOGGATO")
       if(localPlayerId===-1){
         //l'utente non è loggato
         setShowSelectorInitModal(false);
@@ -68,11 +73,10 @@ export default function App(){
         getLocalPlayerNameApi(parseInt(localPlayerId,10));
       }
     }
+    console.log("INIT, localPlayerId: "+localPlayerId);
 
 
 
-    console.log("player id: "+savedLocalPlayerId);
-    setLocalPlayerId(savedLocalPlayerId);
     document.getElementById("timeBar").style.animationPlayState = "paused";
     document.getElementById("timeBar").style.animationPlayState = "paused";
   },[]);
@@ -98,7 +102,7 @@ export default function App(){
   //funzione attivata ad ogni cambio di playerId
   useEffect(() => {
     localStorage.setItem('localPlayerId',localPlayerId)
-    console.log('salvataggio di localPlayerId: '+localPlayerId)
+    console.log('salvataggio di localPlayerIddd: '+localPlayerId)
   }, [localPlayerId]);
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
@@ -164,7 +168,7 @@ export default function App(){
       <div id="modal">
         {(showSelectorInitModal || showLoginModal) && <ShadowLayer/>}
         {showSelectorInitModal && <SelectorInitModal closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
-        {showLoginModal && <LoginModal setShowSelectorInitModal={setShowSelectorInitModal} setShowLoginModal={setShowLoginModal}/>}
+        {showLoginModal && <LoginModal setLocalPlayerId={setLocalPlayerId} setShowSelectorInitModal={setShowSelectorInitModal} setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>
         <div id="blurDiv3"></div>

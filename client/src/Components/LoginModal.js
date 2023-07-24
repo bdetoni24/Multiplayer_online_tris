@@ -26,7 +26,9 @@ export default function(props){ //posso implementare la password
                     "is_online": is_online,
                 }
             });
+            props.setLocalPlayerId(response.data);
             console.log('nuovo giocatore:', response.data);
+            console.log('id nuovo giocatore: '+response.data);
         }
         catch{
             console.error('errore nel creare il giocatore su react');
