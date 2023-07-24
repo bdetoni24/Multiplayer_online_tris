@@ -14,6 +14,13 @@ const sequelizeDB = new Sequelize('database_tris', 'root', '', {
   dialect: 'mysql',
 });
 
+//inizializazzione di cors
+app.use(cors({
+  origin: '*',
+  allowedHeaders: ['X-Requested-With', 'Content-Type'],
+  allowedMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
+
 //creazione del modello player
 const Player = sequelizeDB.define('players', {
   player_id: {
@@ -33,7 +40,7 @@ const Player = sequelizeDB.define('players', {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
-  isOnline: {
+  is_online: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
     allowNull: false,
@@ -51,6 +58,27 @@ app.get('/api/players', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Errore del server' });
     console.log(error);
+  }
+});
+
+//aggiunge un nuovo record player
+app.post('/api/players/addPlayer', async (req, res) => {
+  const { nickname, password, match_id, isOnline } = req.body;
+
+  try {
+    console.log('nickname: '+nickname);
+    const newPlayer = await Player.create({
+      nickname:nickname,
+      password:password,
+      match_id:match_id,
+      is_online: is_online,
+    });
+
+    // Ritorna il nuovo giocatore appena creato come risposta
+    res.status(201).json(newPlayer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Errore del server' });
   }
 });
 
@@ -83,9 +111,6 @@ app.get('/api/players/:playerId', async (req, res) => {
   -new match in game
 
 */
-
-// Abilita le richieste cross-origin da tutte le origini
-app.use(cors());
 
 // Imposta la cartella di build del progetto React
 app.use(express.static(path.join(__dirname,'main-react-app', 'build')));

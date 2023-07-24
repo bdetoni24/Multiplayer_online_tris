@@ -6,28 +6,32 @@ export default function(){ //posso implementare la password
     const [isPasswordPresent,setIsPasswordPresent] = useState(true)
     const baseUrl = "http://localhost:5000/"
 
-    function usernameCheck(){
-        //richiesta ad express per vedere se nel server è presente l'utente
-        /*const username='admin'
-        try {
-            const response = Axios.get(`/api/checkUsername/${username}`);
-            return response.data.exists;
-          } catch (error) {
-            console.error('Errore durante la richiesta:', error);
-            return false;
-          }*/
-          console.log('invio richiesta get')
-        const response = axios.get("http://localhost:5000/test")
-        console.log('data receved: '+response.data)
-    };
+    async function addNewPlayerApi(){
+        const nickname = document.querySelector('input[name="nickname"]').value;
+        const password = 1234;
+        const match_id = -1;
+        const is_online = 0;
+        try{
+            const response = await axios.post('http://localhost:500/api/players/addPlayer', {
+                nickname: nickname,
+                password: password,
+                match_id: match_id,
+                is_online: is_online,
+            });
+            console.log('nuovo giocatore:', response.data);
+        }
+        catch{
+            console.error('errore nel creare il giocatore su react');
+        }
+    }
 
     return(
         <div id="loginModal">
             <div className="floating-heading">
                 <h1>Login</h1>
             </div>
-            <input type="text" name="username" placeholder="Nickname"/> <br/>
-            <button onClick={usernameCheck} >Login</button>
+            <input type="text" name="nickname" placeholder="Nickname"/> <br/>
+            <button onClick={addNewPlayerApi} >Login</button>
         </div>
     );
 }
