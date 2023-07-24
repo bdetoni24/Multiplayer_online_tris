@@ -5,9 +5,10 @@ export default function(props){ //posso implementare la password
     const baseUrl = "http://localhost:5000/"
 
     function handleSubmitLogin(){
-        addNewPlayerApi();
+        addNewPlayerApi()
         props.setShowLoginModal(false)
         props.setShowSelectorInitModal(true)
+        props.setLocalPlayerName(document.querySelector('input[name="nickname"]').value)
     }
 
     async function addNewPlayerApi(){
@@ -26,7 +27,8 @@ export default function(props){ //posso implementare la password
                     "is_online": is_online,
                 }
             });
-            props.setLocalPlayerId(response.data);
+            const localPlayerId = await response.data;
+            props.setLocalPlayerId(parseInt(localPlayerId,10));
             console.log('nuovo giocatore:', response.data);
             console.log('id nuovo giocatore: '+response.data);
         }

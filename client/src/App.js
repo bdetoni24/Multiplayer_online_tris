@@ -24,6 +24,7 @@ export default function App(){
 
   //funzione post caricamento pagina
   useEffect(() => {
+    console.log("---INITIALIZATION---");
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
     const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
@@ -37,48 +38,30 @@ export default function App(){
     if(savedOWin){
       setOWin(savedOWin)
     }
-    if(!(savedLocalPlayerId==-1)){
-      //se l'id è stato cambiato
-      console.log("LOGGATO");
+    if(!isNaN(savedLocalPlayerId)){
+      //la variabile non è nulla (qualcosa prima è stato salvato)
+      console.log("-salvato local player");
       setLocalPlayerId(savedLocalPlayerId);
-      if(savedLocalPlayerId===-1){
-        //l'utente non è loggato
-        setShowSelectorInitModal(false);
-        setShowLoginModal(true);
-        blurAll();
-        console.log('not logged')
-      }
-      else{
-        //l'utente è già loggato
-        setShowSelectorInitModal(true);
-        setShowLoginModal(false);
-        blurAll();
-        getLocalPlayerNameApi(parseInt(localPlayerId,10));
-      }
+      console.log("-localPlayerId: "+localPlayerId);
+    }
+
+    if(localPlayerId==-1){
+      //utente non è loggato 
+      console.log('utente non loggato');
+      setShowSelectorInitModal(false);
+      setShowLoginModal(true);
+      blurAll();
     }
     else{
-      //se non è stato salvato nulla
-      console.log("NON LOGGATO")
-      if(localPlayerId===-1){
-        //l'utente non è loggato
-        setShowSelectorInitModal(false);
-        setShowLoginModal(true);
-        blurAll();
-      }
-      else{
-        //l'utente è già loggato
-        setShowSelectorInitModal(true);
-        setShowLoginModal(false);
-        blurAll();
-        getLocalPlayerNameApi(parseInt(localPlayerId,10));
-      }
+      //utente già loggato
+      console.log('utente loggato');
+      setShowSelectorInitModal(true);
+      setShowLoginModal(false);
+      blurAll();
+      getLocalPlayerNameApi(parseInt(localPlayerId,10));
     }
-    console.log("INIT, localPlayerId: "+localPlayerId);
-
-
-
-    document.getElementById("timeBar").style.animationPlayState = "paused";
-    document.getElementById("timeBar").style.animationPlayState = "paused";
+    
+    console.log("---end INITIALIZATION---");
   },[]);
 
   //serve a prendere il nickname dato il player_id
@@ -101,8 +84,8 @@ export default function App(){
 
   //funzione attivata ad ogni cambio di playerId
   useEffect(() => {
-    localStorage.setItem('localPlayerId',localPlayerId)
-    console.log('salvataggio di localPlayerIddd: '+localPlayerId)
+    localStorage.setItem('localPlayerId', localPlayerId);
+    console.log('.salvataggio di localPlayerId: ' + localPlayerId);
   }, [localPlayerId]);
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
@@ -130,12 +113,6 @@ export default function App(){
     setXWin(0)
     setOWin(0)
   } 
-
-  //funzione per gestire il gioco locale
-  function newLocalGameSelected(){
-    //document.getElementById("timeBar").style.animationPlayState = "running";
-  }
-
   
   //toglie il blur a tutto
   function unBlurAll(){
@@ -143,7 +120,7 @@ export default function App(){
     document.getElementById("mainTitle").style.filter = blurFilter;
     document.getElementById("exitButton").style.filter = blurFilter; 
     document.getElementById("recordTable").style.filter = blurFilter;
-    document.getElementById("versionLabel").style.filter = blurFilter;
+    //document.getElementById("versionLabel").style.filter = blurFilter;
     document.getElementById("exitButton").style.filter = blurFilter;
     document.getElementById("mainTable").style.filter = blurFilter;
     document.getElementById("localPlayerDashboard").style.filter = blurFilter;
@@ -156,7 +133,7 @@ export default function App(){
     document.getElementById("mainTitle").style.filter = blurFilter;
     document.getElementById("exitButton").style.filter = blurFilter;
     document.getElementById("recordTable").style.filter = blurFilter;
-    document.getElementById("versionLabel").style.filter = blurFilter;
+    //document.getElementById("versionLabel").style.filter = blurFilter;
     document.getElementById("exitButton").style.filter = blurFilter;
     document.getElementById("mainTable").style.filter = blurFilter;
     document.getElementById("localPlayerDashboard").style.filter = blurFilter;
@@ -168,7 +145,7 @@ export default function App(){
       <div id="modal">
         {(showSelectorInitModal || showLoginModal) && <ShadowLayer/>}
         {showSelectorInitModal && <SelectorInitModal closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
-        {showLoginModal && <LoginModal setLocalPlayerId={setLocalPlayerId} setShowSelectorInitModal={setShowSelectorInitModal} setShowLoginModal={setShowLoginModal}/>}
+        {showLoginModal && <LoginModal setLocalPlayerName={setLocalPlayerName} setLocalPlayerId={setLocalPlayerId} setShowSelectorInitModal={setShowSelectorInitModal} setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>
         <div id="blurDiv3"></div>

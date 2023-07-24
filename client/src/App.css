@@ -318,6 +318,7 @@ body{
 
 /*VERSION LABEL*/
 #versionLabel{
+  z-index: 100;
   position: absolute;
   bottom: 0;
   right: 0;
