@@ -18,6 +18,11 @@ const SelectorInitModal = (props) => {
     props.logOut()
   }
 
+  function handleSubmitNewGame(){
+    handleSubmit()
+    props.setShowLoadingModal(true)
+  }
+
   return (
     <>
       <div className="selectorInitModal">
@@ -25,7 +30,7 @@ const SelectorInitModal = (props) => {
           <h1>Hi {props.localPlayerName}!</h1>
         </div>
         <div className="modal-body">
-          <button onClick={handleSubmit}>New Game</button>
+          <button onClick={handleSubmitNewGame}>New Game</button>
           <button disabled onClick={handleSubmit}>Play Local</button>
           <div id="partyMenu">
             <button disabled onClick={handleSubmit}>Enter a Party</button>

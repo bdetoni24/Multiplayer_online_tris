@@ -9,6 +9,7 @@ import VersionLabel from './Components/VersionLabel.js';
 import ShadowLayer from './Components/ShadowLayer.js';
 import OpponentPlayerDashBoard from './Components/OpponentPlayerDashBoard.js'
 import LoginModal from './Components/LoginModal.js';
+import LoadingModal from './Components/LoadingModal.js';
 import axios from 'axios';
 
 export default function App(){
@@ -17,6 +18,7 @@ export default function App(){
   const [oWin,setOWin] = useState(0)
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [showLoginModal,setShowLoginModal] = useState(false)
+  const [showLoadingModal,setShowLoadingModal] = useState(false)
   let [localPlayerId,setLocalPlayerId] = useState(-1); //ERRORE
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
@@ -159,8 +161,9 @@ export default function App(){
   return( 
     <div>
       <div id="modal">
-        {(showSelectorInitModal || showLoginModal) && <ShadowLayer/>}
-        {showSelectorInitModal && <SelectorInitModal logOut={logOut} closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
+        {(showSelectorInitModal || showLoginModal || showLoadingModal) && <ShadowLayer/>}
+        {showLoadingModal && <LoadingModal/>}
+        {showSelectorInitModal && <SelectorInitModal setShowLoadingModal={setShowLoadingModal} logOut={logOut} closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
         {showLoginModal && <LoginModal setLocalPlayerName={setLocalPlayerName} setLocalPlayerId={setLocalPlayerId} setShowSelectorInitModal={setShowSelectorInitModal} setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>
