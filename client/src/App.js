@@ -48,8 +48,8 @@ export default function App(){
         setShowSelectorInitModal(true);
         setShowLoginModal(false);
         blurAll();
-        console.log('logged')
-        getPlayerNickname(localPlayerId);
+        console.log('logged, localPlayerId: '+localPlayerId)
+        getLocalPlayerNameApi(parseInt(localPlayerId,10));
       }
     }
     else{
@@ -65,7 +65,7 @@ export default function App(){
         setShowSelectorInitModal(true);
         setShowLoginModal(false);
         blurAll();
-        getPlayerNickname(localPlayerId);
+        getLocalPlayerNameApi(parseInt(localPlayerId,10));
       }
     }
 
@@ -78,22 +78,12 @@ export default function App(){
   },[]);
 
   //serve a prendere il nickname dato il player_id
-  function getPlayerNickname (playerId) {
+  function getLocalPlayerNameApi (playerId) {
     try {
-      // Configurazione degli headers
-      const headers = {
-        'Content-Type': 'application/json', // Specifica il tipo di contenuto nella richiesta
-      };
-
-      // Configurazione dei parametri
-      const params = {
-        idReal: 123, // Valore reale del player_id che desideri ottenere
-        idPrev: playerId, // Valore del player_id passato come parametro della funzione
-      };
 
       const response =  axios.get(`http://localhost:5000/api/players/${playerId}`);
       setLocalPlayerName(response.data.nickname);
-      console.log(response.data);
+      console.log(response);
     } catch (error) {
       console.error('Errore durante la chiamata API per il nickname dato il player_id:', error);
     }
@@ -188,10 +178,6 @@ export default function App(){
         <ExitButton/>
         <VersionLabel/>
       </div>
-      <audio autoplay loop>
-        <source src="Media/music_arcade.mp3" type="audio/mp3"></source>
-        Your browser does not support the audio element.
-      </audio>
 
     </div>
     );
