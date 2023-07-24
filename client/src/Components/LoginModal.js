@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
 
-export default function(){ //posso implementare la password
-    const [isUsernamePresent,setIsUsernamePresent] = useState(true)
-    const [isPasswordPresent,setIsPasswordPresent] = useState(true)
+export default function(props){ //posso implementare la password
     const baseUrl = "http://localhost:5000/"
 
-    
+    function handleSubmitLogin(){
+        addNewPlayerApi();
+        props.setShowLoginModal(false)
+        props.setShowSelectorInitModal(true)
+    }
 
     async function addNewPlayerApi(){
         const nickname = document.querySelector('input[name="nickname"]').value;
@@ -37,7 +39,7 @@ export default function(){ //posso implementare la password
                 <h1>Login</h1>
             </div>
             <input type="text" name="nickname" placeholder="Nickname"/> <br/>
-            <button onClick={addNewPlayerApi} >Login</button>
+            <button onClick={handleSubmitLogin} >Login</button>
         </div>
     );
 }

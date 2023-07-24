@@ -164,7 +164,7 @@ export default function App(){
       <div id="modal">
         {(showSelectorInitModal || showLoginModal) && <ShadowLayer/>}
         {showSelectorInitModal && <SelectorInitModal closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
-        {showLoginModal && <LoginModal setShowLoginModal={setShowLoginModal}/>}
+        {showLoginModal && <LoginModal setShowSelectorInitModal={setShowSelectorInitModal} setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>
         <div id="blurDiv3"></div>
