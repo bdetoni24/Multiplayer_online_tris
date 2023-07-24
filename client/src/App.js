@@ -76,6 +76,20 @@ export default function App(){
     }
   };
 
+  async function logOut(){
+    try{
+      const response = await axios.delete(`http://localhost:5000/api/players/delete/${localPlayerId}`);
+      console.log(response);
+    }
+    catch (error){
+      console.error(error)
+    }
+    setShowLoginModal(true)
+    setShowSelectorInitModal(false)
+    setLocalPlayerId(-1)
+    setLocalPlayerName("player_name")
+  }
+
   //chiude il selector init modal
   function closeSelectorInitModal(){
     unBlurAll();
@@ -140,11 +154,13 @@ export default function App(){
     document.getElementById("opponentPlayerDashboard").style.filter = blurFilter;
   }
 
+ 
+
   return( 
     <div>
       <div id="modal">
         {(showSelectorInitModal || showLoginModal) && <ShadowLayer/>}
-        {showSelectorInitModal && <SelectorInitModal closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
+        {showSelectorInitModal && <SelectorInitModal logOut={logOut} closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
         {showLoginModal && <LoginModal setLocalPlayerName={setLocalPlayerName} setLocalPlayerId={setLocalPlayerId} setShowSelectorInitModal={setShowSelectorInitModal} setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>

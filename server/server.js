@@ -63,6 +63,24 @@ app.get('/api/players', async (req, res) => {
   }
 });
 
+//dato il playerId elimina il record del player
+app.delete('/api/players/delete/:player_id', async (req, res) => {
+  const player_id = req.params.player_id;
+
+  try{
+    await Player.destroy({
+      where: {
+        player_id: player_id,
+      },
+    });
+  }
+  catch(error){
+    console.error(error)
+  }
+
+  res.status(200).send();
+});
+
 //aggiunge un nuovo record player
 app.post('/api/players/addPlayer', async (req, res) => {
   const { nickname, password, match_id, is_online } = req.body;

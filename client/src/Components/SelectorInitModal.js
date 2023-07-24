@@ -15,6 +15,7 @@ const SelectorInitModal = (props) => {
 
   function logOut(){
     console.log("logout..");
+    props.logOut()
   }
 
   return (
