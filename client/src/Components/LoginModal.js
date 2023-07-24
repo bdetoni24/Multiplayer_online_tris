@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
 
-export default function(){ //posso fare a meno deglis tati?
+export default function(){ //posso implementare la password
     const [isUsernamePresent,setIsUsernamePresent] = useState(true)
     const [isPasswordPresent,setIsPasswordPresent] = useState(true)
     const baseUrl = "http://localhost:5000/"
@@ -27,7 +27,6 @@ export default function(){ //posso fare a meno deglis tati?
                 <h1>Login</h1>
             </div>
             <input type="text" name="username" placeholder="Nickname"/> <br/>
-            <input type="password" name="password" placeholder="Password"/><br/>
             <button onClick={usernameCheck} >Login</button>
         </div>
     );

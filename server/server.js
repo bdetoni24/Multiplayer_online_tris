@@ -1,16 +1,77 @@
 const express = require('express');
 const sequelize = require('sequelize');
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const path = require('path');
 var cors = require('cors');
 const port = 5000;
 const app = express();
+const axios = require('axios').default;
 
 // creazione istanza del database
 const sequelizeDB = new Sequelize('database_tris', 'root', '', {
   host: 'localhost',
   port: 3306,
   dialect: 'mysql',
+});
+
+//creazione del modello player
+const Player = sequelizeDB.define('players', {
+  player_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  nickname: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  password: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  match_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  isOnline: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
+}, {
+  timestamps: false, 
+});
+
+//restituisce tutta la tabella players
+app.get('/api/players', async (req, res) => {
+  try {
+    const players = await Player.findAll();
+    res.json(players);
+    console.log(players);
+  } catch (error) {
+    res.status(500).json({ error: 'Errore del server' });
+    console.log(error);
+  }
+});
+
+//dato un player_id restituisce il nickname
+app.get('/api/players/:playerId', async (req, res) => {
+  const playerId = req.params.playerId; // Ottieni il player_id dalla richiesta URL
+
+  try {
+    const player = await Player.findByPk(playerId, {
+      attributes: ['nickname'], 
+    });
+
+    if (!player) {
+      //se il non viene trovato restituisce lo status 404 error
+      return res.status(404).json({ error: 'Player_not_found' });
+    }
+
+    res.json({ nickname: player.nickname });
+  } catch (error) {
+    res.status(500).json({ error: 'server_error' });
+  }
 });
 
 /*API necessarie

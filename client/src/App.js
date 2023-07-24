@@ -9,6 +9,7 @@ import VersionLabel from './Components/VersionLabel.js';
 import ShadowLayer from './Components/ShadowLayer.js';
 import OpponentPlayerDashBoard from './Components/OpponentPlayerDashBoard.js'
 import LoginModal from './Components/LoginModal.js';
+import axios from 'axios';
 
 export default function App(){
   //variabili e stati
@@ -16,7 +17,7 @@ export default function App(){
   const [oWin,setOWin] = useState(0)
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [showLoginModal,setShowLoginModal] = useState(false)
-  const [localPlayerId,setLocalPlayerId] = useState(-1);
+  const [localPlayerId,setLocalPlayerId] = useState(1);
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
@@ -48,6 +49,7 @@ export default function App(){
         setShowLoginModal(false);
         blurAll();
         console.log('logged')
+        getPlayerNickname(localPlayerId);
       }
     }
     else{
@@ -63,13 +65,39 @@ export default function App(){
         setShowSelectorInitModal(true);
         setShowLoginModal(false);
         blurAll();
+        getPlayerNickname(localPlayerId);
       }
     }
+
+
+
     console.log("player id: "+savedLocalPlayerId);
     setLocalPlayerId(savedLocalPlayerId);
     document.getElementById("timeBar").style.animationPlayState = "paused";
     document.getElementById("timeBar").style.animationPlayState = "paused";
   },[]);
+
+  //serve a prendere il nickname dato il player_id
+  function getPlayerNickname (playerId) {
+    try {
+      // Configurazione degli headers
+      const headers = {
+        'Content-Type': 'application/json', // Specifica il tipo di contenuto nella richiesta
+      };
+
+      // Configurazione dei parametri
+      const params = {
+        idReal: 123, // Valore reale del player_id che desideri ottenere
+        idPrev: playerId, // Valore del player_id passato come parametro della funzione
+      };
+
+      const response =  axios.get(`http://localhost:5000/api/players/${playerId}`);
+      setLocalPlayerName(response.data.nickname);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Errore durante la chiamata API per il nickname dato il player_id:', error);
+    }
+  };
 
   //chiude il selector init modal
   function closeSelectorInitModal(){
@@ -145,7 +173,7 @@ export default function App(){
     <div>
       <div id="modal">
         {(showSelectorInitModal || showLoginModal) && <ShadowLayer/>}
-        {showSelectorInitModal && <SelectorInitModal closeSelectorInitModal={closeSelectorInitModal} />}
+        {showSelectorInitModal && <SelectorInitModal closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
         {showLoginModal && <LoginModal setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>

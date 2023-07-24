@@ -21,14 +21,14 @@ const SelectorInitModal = (props) => {
     <>
       <div className="selectorInitModal">
         <div className="floating-heading">
-          <h1>Hi {props.playerName}!</h1>
+          <h1>Hi {props.localPlayerName}!</h1>
         </div>
         <div className="modal-body">
           <button onClick={handleSubmit}>New Game</button>
-          <button onClick={handleSubmit}>Play Local</button>
+          <button disabled onClick={handleSubmit}>Play Local</button>
           <div id="partyMenu">
-            <button onClick={handleSubmit}>Enter a Party</button>
-            <button onClick={handleSubmit}>Create Party</button>
+            <button disabled onClick={handleSubmit}>Enter a Party</button>
+            <button disabled onClick={handleSubmit}>Create Party</button>
           </div>
         </div>
         <div>
