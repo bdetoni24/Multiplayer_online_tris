@@ -19,16 +19,18 @@ export default function App(){
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [showLoginModal,setShowLoginModal] = useState(false)
   const [showLoadingModal,setShowLoadingModal] = useState(false)
-  const [localPlayerId,setLocalPlayerId] = useState(); //ERRORE
+  const [localPlayerId,setLocalPlayerId] = useState(-1); //ERRORE
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
-  
+  const [matchId,setMatchId] = useState(-1) //non occorre salvarlo in memoria? si per evitare che se si aggiorna si esce dal game
+
   //funzione post caricamento pagina
   useEffect(() => {
     console.log("---INITIALIZATION---");
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
+    const savedMatchId = parseInt(localStorage.getItem('matchId'),10)
     //const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
     if(savedXWin){
       setXWin(savedXWin)
@@ -36,8 +38,12 @@ export default function App(){
     if(savedOWin){
       setOWin(savedOWin)
     }
+    if(savedMatchId){
+      setMatchId(savedMatchId)
+    }
 
-    if(!getLocalPlayerId()){
+    //gestione del login
+    if(getLocalPlayerId()==-1){
       //utente non è loggato 
       console.log('utente non loggato');
       setShowSelectorInitModal(false);
@@ -51,8 +57,10 @@ export default function App(){
       setShowLoginModal(false);
       blurAll();
       getLocalPlayerNameApi(getLocalPlayerId());
+
+      //gestione del match online (se il player è già dentro un match)
     }
-    
+    console.log("localPlayerId: "+localPlayerId)
     console.log("---end INITIALIZATION---");
   },[]);
 
@@ -64,6 +72,10 @@ export default function App(){
     else{
       return -1
     }
+  }
+
+  function setSetLocalPlayerId(id){
+    localStorage.setItem('localPlayerId',parseInt(id),10)
   }
 
   //serve a prendere il nickname dato il player_id
@@ -88,23 +100,47 @@ export default function App(){
     }
     setShowLoginModal(true)
     setShowSelectorInitModal(false)
-    setLocalPlayerId(-1)
+    setSetLocalPlayerId(-1)
     setLocalPlayerName("player_name")
+    console.log("logOut....")
   }
 
   //si attiva quando viene cliccato un new game
   function newGameSelected(){
-    unBlurAll();
     setShowSelectorInitModal(false);
     setShowLoadingModal(true)
+    findOpponent()
   }
 
   async function findOpponent(){
-    const response = await axios.post(`http://localhost:5000/api/start-match/${localPlayerId}`)
-    console.log('FIND OPPONENT: RESPONSE: '+response.data)
+    try{
+      const response = await axios.post(`http://localhost:5000/api/start-match/${localPlayerId}`)
+      if(response.data.match){
+        //se viene creato un match
+        console.log("Match creato: "+response.data.match)
+        setShowLoadingModal(false)
+        unBlurAll()
+      }
+      else{
+        console.log("Match NON creato")
+        //creazione del polling per controllare ogni 4.5sec se c'è stato un match
+        const pollingMatchId = setInterval(getMatchId, 4500)
+      }
+    }
+    catch(error){
+      console.log("errore nel trovare un avversario online")
+    }
   }
 
-  
+  async function getMatchId(playerId){
+    console.log("---getMatchId() in esecuzione")
+    try {
+      const response = await axios.get(`/api/getMatchId/${playerId}`);
+      setMatchId(response.data.match_id);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {

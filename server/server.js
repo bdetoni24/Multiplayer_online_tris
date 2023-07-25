@@ -14,16 +14,16 @@ const sequelizeDB = new Sequelize('database_tris', 'root', '', {
   dialect: 'mysql',
 });
 
+//selezione dei middleweare da usare
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//inizializazzione di cors
 app.use(cors({
   origin: '*',
   allowedHeaders: ['X-Requested-With', 'Content-Type'],
   allowedMethods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
-// Define the "Player" model
+// define player model
 const Player = sequelizeDB.define('players', {
   player_id: {
     type: DataTypes.INTEGER,
@@ -62,6 +62,7 @@ const Player = sequelizeDB.define('players', {
   timestamps: false,
 });
 
+// define match model
 const Match = sequelizeDB.define('matches', {
   match_id: {
     type: DataTypes.INTEGER,
@@ -110,6 +111,7 @@ const Match = sequelizeDB.define('matches', {
   timestamps: false,
 });
 
+// define historyGame model
 const HistoryGame = sequelizeDB.define('history_game', {
   history_match_id: {
     type: DataTypes.INTEGER,
@@ -169,6 +171,25 @@ Match.belongsTo(Player, { foreignKey: 'player1_id', as: 'player1' });
 Match.belongsTo(Player, { foreignKey: 'player2_id', as: 'player2' });
 Match.hasOne(HistoryGame, { foreignKey: 'match_id', as: 'historyGame' });
 
+//dato player_id restituisce il valore di match_id
+app.get('/api/getMatchId/:player_id', async (req, res) => {
+  const { player_id } = req.params;
+
+  try {
+    const player = await Player.findByPk(player_id, { attributes: ['match_id'] });
+    if (player) {
+      //se viene trovato un player
+      res.json({ match_id: player.match_id });
+    }
+    else{
+      //se non viene trovato alcun player
+      return res.status(404).json({ error: 'Player not found' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 //controlla se ci sono altri giocatori online per matcharli
 app.post('/api/start-match/:playerId', async (req, res) => {
@@ -177,28 +198,42 @@ app.post('/api/start-match/:playerId', async (req, res) => {
 
     //controllo se si trova un giocatore già online
     const onlinePlayer = await Player.findOne({
-      where: { is_online: true, player_id: { [Sequelize.Op.not]: playerId } },
+      where: {
+        is_online: true,
+        player_id: { [Sequelize.Op.not]: playerId },
+        last_online: { [Sequelize.Op.gte]: new Date(Date.now() - 5000) },
+      },
     });
 
     if (onlinePlayer) {
-      //se viene trovato un player online 
+      //se viene trovato un player online che sia stato online negli ultimi 5 sec
       await onlinePlayer.update({ is_online: false });
       const newMatch = await Match.create({
         player1_id: playerId,
         player2_id: onlinePlayer.player_id,
+        player_id_turn: playerId, 
       });
 
+      await Player.update(
+        { match_id: newMatch.match_id },
+        { where: { player_id: { [Sequelize.Op.in]: [playerId, onlinePlayer.player_id] } } }
+      );
+
+      console.log("player trovato e match creato");
       return res.status(200).json({ message: 'Match created successfully!', match: newMatch });
-    } else {
+    }
+    else{
       //se non viene trovato altro player online
       const currentPlayer = await Player.findByPk(playerId);
       if (!currentPlayer) {
         //se non viene trovato il player
+        console.log("player non trovato");
         return res.status(404).json({ error: 'Player not found' });
       }
       else{
         //se il player viene trovato, allora ne cambio il valore in true
-        await currentPlayer.update({ is_online: true });
+        await currentPlayer.update({ is_online: true, last_online: new Date() });
+        console.log("player modificato con successo");
         return res.status(200).json({ message: 'Player status updated successfully!' });
       }
     }

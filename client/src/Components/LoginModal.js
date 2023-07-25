@@ -3,12 +3,17 @@ import React, { useState, useEffect } from 'react';
 
 export default function(props){ //posso implementare la password
     const baseUrl = "http://localhost:5000/"
+    const [error, setError] = useState('');
 
     function handleSubmitLogin(){
-        addNewPlayerApi()
-        props.setShowLoginModal(false)
-        props.setShowSelectorInitModal(true)
-        props.setLocalPlayerName(document.querySelector('input[name="nickname"]').value)
+        const nickname = document.querySelector('input[name="nickname"]').value
+        console.log("nick: "+nickname);
+        if(!validateNickname(nickname)){
+            addNewPlayerApi()
+            props.setShowLoginModal(false)
+            props.setShowSelectorInitModal(true)
+            props.setLocalPlayerName(nickname)
+        }
     }
 
     async function addNewPlayerApi(){
@@ -38,13 +43,31 @@ export default function(props){ //posso implementare la password
         }
     }
 
+    function validateNickname (nick){
+        //controllo se il nome supera i 16 caratteri o contiene spazi
+        let isError=false;
+
+        if (nick.length > 14) {
+          setError('Il nome deve essere lungo al massimo 14 caratteri.');
+          isError=true;
+        } else if (nick.includes(' ')) {
+          setError('Il nome non può contenere spazi.');
+          isError=true;
+        } else {
+          setError('');
+        }
+        return isError
+      };
+
     return(
         <div id="loginModal">
             <div className="floating-heading">
                 <h1>Login</h1>
             </div>
-            <input type="text" name="nickname" placeholder="Nickname"/> <br/>
-            <button onClick={handleSubmitLogin} >Login</button>
+                <input type="text" name="nickname" placeholder="Nickname"/> <br/>
+                {error && <div style={{ color: 'red' }}>{error}</div>}
+                <button onClick={handleSubmitLogin} >Login</button>
+            
         </div>
     );
 }
