@@ -3,9 +3,6 @@ import React, { useState, useEffect } from "react";
 const SelectorInitModal = (props) => {
 
   function handleSubmit(){
-    props.closeSelectorInitModal();
-    //document.getElementById("timeBar").style.animationPlayState = "running";
-    
   };
 
 
@@ -19,8 +16,7 @@ const SelectorInitModal = (props) => {
   }
 
   function handleSubmitNewGame(){
-    handleSubmit()
-    props.setShowLoadingModal(true)
+    props.newGameSelected()
   }
 
   return (

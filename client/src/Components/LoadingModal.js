@@ -1,7 +1,7 @@
 export default function LoadingModal(){
     return(
         <div id="loadingModal">
-            <img src="../Media/loading.gif"/>
+            <img src="./Media/loading.gif"/>
         </div>
     );
 }

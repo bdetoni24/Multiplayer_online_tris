@@ -51,6 +51,44 @@ const Player = sequelizeDB.define('players', {
   timestamps: false, 
 });
 
+//controlla se ci sono altri giocatori online per matcharli
+app.post('/api/start-match/:playerId', async (req, res) => {
+  try {
+    const { playerId } = req.params;
+
+    //controllo se si trova un giocatore già online
+    const onlinePlayer = await Player.findOne({
+      where: { is_online: true, player_id: { [Sequelize.Op.not]: playerId } },
+    });
+
+    if (!isNaN(onlinePlayer)) {
+      //se viene trovato un player online 
+      await onlinePlayer.update({ is_online: false });
+      const newMatch = await Match.create({
+        player1_id: playerId,
+        player2_id: onlinePlayer.player_id,
+      });
+
+      return res.status(200).json({ message: 'Match created successfully!', match: newMatch });
+    } else {
+      //se non viene trovato altro player online
+      const currentPlayer = await Player.findByPk(playerId);
+      if (!currentPlayer) {
+        //se non viene trovato il player
+        return res.status(404).json({ error: 'Player not found' });
+      }
+      else{
+        //se il player viene trovato, allora ne cambio il valore in true
+        await currentPlayer.update({ is_online: true });
+        return res.status(200).json({ message: 'Player status updated successfully!' });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'server error' });
+  }
+});
+
 //restituisce tutta la tabella players
 app.get('/api/players', async (req, res) => {
   try {

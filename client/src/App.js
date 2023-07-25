@@ -92,10 +92,15 @@ export default function App(){
     setLocalPlayerName("player_name")
   }
 
-  //chiude il selector init modal
-  function closeSelectorInitModal(){
+  //si attiva quando viene cliccato un new game
+  function newGameSelected(){
     unBlurAll();
     setShowSelectorInitModal(false);
+    setShowLoadingModal(true)
+  }
+
+  async function findOpponent(){
+    
   }
 
   //funzione attivata ad ogni cambio di playerId
@@ -163,7 +168,7 @@ export default function App(){
       <div id="modal">
         {(showSelectorInitModal || showLoginModal || showLoadingModal) && <ShadowLayer/>}
         {showLoadingModal && <LoadingModal/>}
-        {showSelectorInitModal && <SelectorInitModal setShowLoadingModal={setShowLoadingModal} logOut={logOut} closeSelectorInitModal={closeSelectorInitModal} localPlayerName={localPlayerName}/>}
+        {showSelectorInitModal && <SelectorInitModal newGameSelected={newGameSelected} setShowLoadingModal={setShowLoadingModal} logOut={logOut} localPlayerName={localPlayerName}/>}
         {showLoginModal && <LoginModal setLocalPlayerName={setLocalPlayerName} setLocalPlayerId={setLocalPlayerId} setShowSelectorInitModal={setShowSelectorInitModal} setShowLoginModal={setShowLoginModal}/>}
         <div id="blurDiv1"></div>
         <div id="blurDiv2"></div>
