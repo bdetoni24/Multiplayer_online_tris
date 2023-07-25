@@ -19,19 +19,25 @@ export default function App(){
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [showLoginModal,setShowLoginModal] = useState(false)
   const [showLoadingModal,setShowLoadingModal] = useState(false)
-  let [localPlayerId,setLocalPlayerId] = useState(-1); //ERRORE
+  const [localPlayerId,setLocalPlayerId] = useState(); //ERRORE
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
 
+  //funzione attivata ad ogni cambio di playerId
+  useEffect(() => {
+    localStorage.setItem('localPlayerId', localPlayerId);
+    console.log('.salvataggio di localPlayerId: ' + localPlayerId);
+  }, [localPlayerId]);
   //funzione post caricamento pagina
   useEffect(() => {
     console.log("---INITIALIZATION---");
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
     const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
+    console.log("savedLocalPlayerId", savedLocalPlayerId)
     
-    console.log("savedPlayer id: "+savedLocalPlayerId);
+    console.log("====================savedPlayer id: "+savedLocalPlayerId);
 
     if(savedXWin){
       setXWin(savedXWin)
@@ -40,14 +46,15 @@ export default function App(){
       setOWin(savedOWin)
     }
     if(!isNaN(savedLocalPlayerId)){
+      console.log("====================savedPlayer id inside: "+savedLocalPlayerId);
       //la variabile non è nulla (qualcosa prima è stato salvato)
       console.log("-salvato local player")
       setLocalPlayerId(savedLocalPlayerId)
-      localPlayerId = savedLocalPlayerId
-      console.log("-localPlayerId: "+localPlayerId)
+      //localPlayerId = savedLocalPlayerId
+      console.log("§******************localPlayerId: "+localPlayerId)
     }
 
-    if(localPlayerId==-1){
+    if(!localPlayerId){
       //utente non è loggato 
       console.log('utente non loggato');
       setShowSelectorInitModal(false);
@@ -100,17 +107,15 @@ export default function App(){
   }
 
   async function findOpponent(){
-    
+    const response = await axios.post(`http://localhost:5000/api/start-match/${localPlayerId}`)
+    console.log('FIND OPPONENT: RESPONSE: '+response.data)
   }
 
-  //funzione attivata ad ogni cambio di playerId
-  useEffect(() => {
-    localStorage.setItem('localPlayerId', localPlayerId);
-    console.log('.salvataggio di localPlayerId: ' + localPlayerId);
-  }, [localPlayerId]);
+  
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {
+    console.log('+++++++++++salvataggio di xWin: ' + xWin);
     localStorage.setItem('xWin',xWin)
   }, [xWin]);
 

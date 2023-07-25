@@ -61,7 +61,7 @@ app.post('/api/start-match/:playerId', async (req, res) => {
       where: { is_online: true, player_id: { [Sequelize.Op.not]: playerId } },
     });
 
-    if (!isNaN(onlinePlayer)) {
+    if (onlinePlayer) {
       //se viene trovato un player online 
       await onlinePlayer.update({ is_online: false });
       const newMatch = await Match.create({

@@ -14,7 +14,7 @@ export default function(props){ //posso implementare la password
     async function addNewPlayerApi(){
         const nickname = document.querySelector('input[name="nickname"]').value;
         const password = 1234;
-        const match_id = 1;
+        const match_id = null;
         const is_online = 0;
         try{
             const response = await axios({
