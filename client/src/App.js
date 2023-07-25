@@ -41,10 +41,10 @@ export default function App(){
     }
     if(!isNaN(savedLocalPlayerId)){
       //la variabile non è nulla (qualcosa prima è stato salvato)
-      console.log("-salvato local player");
-      setLocalPlayerId(savedLocalPlayerId);
+      console.log("-salvato local player")
+      setLocalPlayerId(savedLocalPlayerId)
       localPlayerId = savedLocalPlayerId
-      console.log("-localPlayerId: "+localPlayerId);
+      console.log("-localPlayerId: "+localPlayerId)
     }
 
     if(localPlayerId==-1){
