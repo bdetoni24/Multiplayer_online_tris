@@ -24,7 +24,7 @@ app.use(cors({
 }));
 
 // Define the "Player" model
-const Player = sequelizeDB.define('Player', {
+const Player = sequelizeDB.define('players', {
   player_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -62,7 +62,7 @@ const Player = sequelizeDB.define('Player', {
   timestamps: false,
 });
 
-const Match = sequelizeDB.define('Match', {
+const Match = sequelizeDB.define('matches', {
   match_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -110,7 +110,7 @@ const Match = sequelizeDB.define('Match', {
   timestamps: false,
 });
 
-const HistoryGame = sequelizeDB.define('HistoryGame', {
+const HistoryGame = sequelizeDB.define('history_game', {
   history_match_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
