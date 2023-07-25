@@ -30,146 +30,138 @@ const Player = sequelizeDB.define('Player', {
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
-    comment: "Player's primary key",
   },
   nickname: {
     type: DataTypes.TEXT,
     allowNull: false,
-    comment: "Player's nickname",
   },
   password: {
     type: DataTypes.TEXT,
     allowNull: false,
-    comment: "Player's password",
   },
   match_id: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "Shows in which match the player is in. If the parameter is empty means the player isn't in a match yet.",
+  },
+  party_id: {
+    type: DataTypes.INTEGER,
+    defaultValue: null,
   },
   is_online: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: 0,
-    comment: "Value to check if the player wants to join an online match",
   },
   last_online: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW,
-    comment: "Value to check if the player is online in recent seconds",
   },
 }, {
   tableName: 'players',
   timestamps: false,
 });
 
-// Define the "Match" model
 const Match = sequelizeDB.define('Match', {
   match_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
-    comment: "Unique match ID",
   },
   player1_id: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "Foreign key of player 1's id",
   },
   player2_id: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "Foreign key of player 2's id",
   },
   history_match_id: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "Foreign key of a history match to store the table's status",
   },
   points_p1: {
     type: DataTypes.INTEGER,
     allowNull: false,
     defaultValue: 0,
-    comment: "Player 1's points",
   },
   points_p2: {
     type: DataTypes.INTEGER,
     allowNull: false,
     defaultValue: 0,
-    comment: "Player 2's points",
+  },
+  is_end_match: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  is_end_game: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  player_id_turn: {
+    type: DataTypes.INTEGER,
+    defaultValue: null,
   },
 }, {
   tableName: 'matches',
   timestamps: false,
 });
 
-// Define the "HistoryGame" model
 const HistoryGame = sequelizeDB.define('HistoryGame', {
   history_match_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
-    comment: "History match primary key",
   },
   match_id: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "Refers to the match",
   },
   status_cell1: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
   status_cell2: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
   status_cell3: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
   status_cell4: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
   status_cell5: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
   status_cell6: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
   status_cell7: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
   status_cell8: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
   status_cell9: {
     type: DataTypes.INTEGER,
     defaultValue: null,
-    comment: "This parameter shows which player clicked it, if it's null means that the cell isn't being clicked yet",
   },
 }, {
   tableName: 'history_game',
   timestamps: false,
 });
 
-// Define associations
 Player.hasMany(Match, { foreignKey: 'player1_id', as: 'player1Matches' });
 Player.hasMany(Match, { foreignKey: 'player2_id', as: 'player2Matches' });
 Player.hasMany(HistoryGame, { foreignKey: 'match_id', as: 'historyGames' });
