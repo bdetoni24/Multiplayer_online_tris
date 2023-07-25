@@ -23,38 +23,21 @@ export default function App(){
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
-
-  //funzione attivata ad ogni cambio di playerId
-  useEffect(() => {
-    localStorage.setItem('localPlayerId', localPlayerId);
-    console.log('.salvataggio di localPlayerId: ' + localPlayerId);
-  }, [localPlayerId]);
+  
   //funzione post caricamento pagina
   useEffect(() => {
     console.log("---INITIALIZATION---");
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
-    const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
-    console.log("savedLocalPlayerId", savedLocalPlayerId)
-    
-    console.log("====================savedPlayer id: "+savedLocalPlayerId);
-
+    //const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
     if(savedXWin){
       setXWin(savedXWin)
     }
     if(savedOWin){
       setOWin(savedOWin)
     }
-    if(!isNaN(savedLocalPlayerId)){
-      console.log("====================savedPlayer id inside: "+savedLocalPlayerId);
-      //la variabile non è nulla (qualcosa prima è stato salvato)
-      console.log("-salvato local player")
-      setLocalPlayerId(savedLocalPlayerId)
-      //localPlayerId = savedLocalPlayerId
-      console.log("§******************localPlayerId: "+localPlayerId)
-    }
 
-    if(!localPlayerId){
+    if(!getLocalPlayerId()){
       //utente non è loggato 
       console.log('utente non loggato');
       setShowSelectorInitModal(false);
@@ -67,11 +50,21 @@ export default function App(){
       setShowSelectorInitModal(true);
       setShowLoginModal(false);
       blurAll();
-      getLocalPlayerNameApi(parseInt(localPlayerId,10));
+      getLocalPlayerNameApi(getLocalPlayerId());
     }
     
     console.log("---end INITIALIZATION---");
   },[]);
+
+  //
+  function getLocalPlayerId(){
+    if(localStorage.getItem('localPlayerId')){
+      return parseInt(localStorage.getItem('localPlayerId'),10)
+    }
+    else{
+      return -1
+    }
+  }
 
   //serve a prendere il nickname dato il player_id
   async function getLocalPlayerNameApi (playerId) {

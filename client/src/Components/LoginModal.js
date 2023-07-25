@@ -31,6 +31,7 @@ export default function(props){ //posso implementare la password
             props.setLocalPlayerId(parseInt(localPlayerId,10));
             console.log('nuovo giocatore:', response.data);
             console.log('id nuovo giocatore: '+response.data);
+            localStorage.setItem("localPlayerId", response.data)
         }
         catch{
             console.error('errore nel creare il giocatore su react');

@@ -5,11 +5,6 @@ const SelectorInitModal = (props) => {
   function handleSubmit(){
   };
 
-
-  //parte all'avviamento della pagina
-  useEffect(() => {
-  }, []);
-
   function logOut(){
     console.log("logout..");
     props.logOut()
