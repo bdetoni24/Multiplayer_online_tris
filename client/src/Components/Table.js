@@ -41,7 +41,7 @@ export default function Table(props){
  
   //gestisce il click di una qualsiasi cella
   function tableClicked(nCella){
-    if(!clickedCells[nCella-1].clicked && !isEndGame){
+    if((!clickedCells[nCella-1].clicked && !isEndGame) && props.myTurn){
       nClick++;
       clickedCells[nCella-1].clicked=true;
       team =! team;
@@ -178,7 +178,7 @@ export default function Table(props){
 
     //fa diventare le celle di colore grigio quando ci si passa sopra
     function mouseOverCell(nCell){
-      if(!clickedCells[nCell-1].clicked&&!isEndGame){
+      if((!clickedCells[nCell-1].clicked && !isEndGame) && props.myTurn){
         document.getElementById(nCell.toString()).style.backgroundColor = '#CACACA';
       }
     }

@@ -7,12 +7,25 @@ export default function(props){ //posso implementare la password
 
     function handleSubmitLogin(){
         const nickname = document.querySelector('input[name="nickname"]').value
-        console.log("nick: "+nickname);
         if(!validateNickname(nickname)){
-            addNewPlayerApi()
-            props.setShowLoginModal(false)
-            props.setShowSelectorInitModal(true)
-            props.setLocalPlayerName(nickname)
+            //se il nickname supera i requisiti
+            try{
+                const response = axios.get(`http://localhost:5000/api/check-nickname/${nickname}`)
+                if(response.data.exists===false){
+                    //non esiste un doppione
+                    addNewPlayerApi()
+                    props.setShowLoginModal(false)
+                    props.setShowSelectorInitModal(true)
+                    props.setLocalPlayerName(nickname)
+                }
+                else{
+                    //esiste un doppione
+                    setError('Il nome è già stato creato.');
+                }
+            }
+            catch(error){
+                console.error(error)
+            }
         }
     }
 

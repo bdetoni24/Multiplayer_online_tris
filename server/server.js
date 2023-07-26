@@ -171,6 +171,33 @@ Match.belongsTo(Player, { foreignKey: 'player1_id', as: 'player1' });
 Match.belongsTo(Player, { foreignKey: 'player2_id', as: 'player2' });
 Match.hasOne(HistoryGame, { foreignKey: 'match_id', as: 'historyGame' });
 
+//dato il match_id restituisce il playerid_1
+app.get('/api/Match/getPlayer1Id/:match_id', async (req, res) => {
+  try {
+    //presa dei parametri
+    const { match_id } = req.params;
+
+    //ricerca del match_id
+    const match = await Match.findOne({
+      where: { match_id },
+      include: [{ model: Player, as: 'player1' }],
+    });
+
+    if (!match) {
+      //se non trova nessun match_id
+      return res.status(404).json({ message: 'Match not found' });
+    }
+
+    //se viene trovato il player allore ne estrae il id
+    const player1_id = match.player1 ? match.player1.player_id : null;
+
+    return res.json({ player1_id: player1_id });
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 //dato player_id restituisce il valore di match_id
 app.get('/api/getMatchId/:player_id', async (req, res) => {
   const { player_id } = req.params;
@@ -220,7 +247,7 @@ app.post('/api/start-match/:playerId', async (req, res) => {
       );
 
       console.log("player trovato e match creato");
-      return res.status(200).json({ message: 'Match created successfully!', match: newMatch });
+      return res.status(200).json({ message: 'Match created successfully!', match: newMatch , playerIdOpponent: onlinePlayer.player_id, nicknameOpponent: onlinePlayer.nickname});
     }
     else{
       //se non viene trovato altro player online
@@ -313,6 +340,25 @@ app.get('/api/players/:playerId', async (req, res) => {
     res.json({ nickname: player.nickname });
   } catch (error) {
     res.status(500).json({ error: 'server_error' });
+  }
+});
+
+//controlla se un username è già presente nel database
+app.get('/api/check-nickname/:username', async (req, res) => {
+  const { username } = req.params;
+  console.log('chack username')
+
+  try {
+    const player = await Player.findOne({ where: { nickname: username } });
+
+    if (player) {
+      res.json({ exists: true });
+    } else {
+      res.json({ exists: false });
+    }
+  } catch (error) {
+    console.error('Error checking username:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

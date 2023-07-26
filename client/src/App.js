@@ -24,6 +24,7 @@ export default function App(){
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
   const [matchId,setMatchId] = useState(-1) //non occorre salvarlo in memoria? si per evitare che se si aggiorna si esce dal game
+  const [myTurn,setMyTurn] = useState(false)
 
   //funzione post caricamento pagina
   useEffect(() => {
@@ -113,33 +114,76 @@ export default function App(){
   }
 
   async function findOpponent(){
+    let pollingMatchId
     try{
       const response = await axios.post(`http://localhost:5000/api/start-match/${localPlayerId}`)
       if(response.data.match){
         //se viene creato un match
-        console.log("Match creato: "+response.data.match)
+        console.log("Match creato: "+response.data.match.match_id)
+        setOpponentPlayerName(response.data.nicknameOpponent)
+        setOpponentPlayerId(response.data.playerIdOpponent)
         setShowLoadingModal(false)
+        console.log("--OPPONENT INFO--")
+        console.log("\t-nome: "+response.data.nicknameOpponent)
+        console.log("\t-id: "+response.data.playerIdOpponent)
+        setMyTurn(true)
         unBlurAll()
       }
       else{
         console.log("Match NON creato")
         //creazione del polling per controllare ogni 4.5sec se c'è stato un match
-        const pollingMatchId = setInterval(getMatchId, 4500)
+        pollingMatchId = setInterval(() => getMatchId(localPlayerId,pollingMatchId), 4500);
       }
     }
     catch(error){
       console.log("errore nel trovare un avversario online")
+      clearInterval(pollingMatchId)
     }
   }
 
-  async function getMatchId(playerId){
+  async function getMatchId(playerId,pollingMatchId){
     console.log("---getMatchId() in esecuzione")
     try {
-      const response = await axios.get(`/api/getMatchId/${playerId}`);
-      setMatchId(response.data.match_id);
+      const response = await axios.get(`http://localhost:5000/api/getMatchId/${playerId}`)
+      if (response.data.match_id !== null) {
+        clearInterval(pollingMatchId);
+        console.log("Match trovato!: " + response.data.match_id);
+        setMatchId(response.data.match_id)
+        try{
+          const response2 = await axios.get(`http://localhost:5000/api/Match/getPlayer1Id/${response.data.match_id}`)
+          console.log("playerOpponentId: "+response2.data.player1_id)
+          try{
+            const response3 = await axios.get(`http://localhost:5000/api/players/${response2.data.match.player1_id}`)
+            console.log('opponent name: '+response3.data.nickname)
+            setOpponentPlayerName(response3.data.nickname)
+            setOpponentPlayerId(response2.data.player1_id)
+            setShowLoadingModal(false)
+            unBlurAll()
+            notMyTurn()
+          }
+          catch(error){
+            console.error(error)
+          }
+
+        }
+        catch(error){
+          console.error(error)
+        }
+        //initNewGame()
+      }
     } catch (error) {
       console.error(error);
     }
+  }
+
+  //funzione che si attiva quando non è il turno del local di gi
+  function notMyTurn(){
+    setMyTurn(false)
+  }
+
+  //funzione che istanzia
+  function initNewGame(){
+    
   }
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
@@ -213,7 +257,7 @@ export default function App(){
         <OpponentPlayerDashBoard opponentPlayerName={opponentPlayerName}/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
-        <Table newXWin={newXWin} newOWin={newOWin}/>
+        <Table myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
         <ExitButton/>
         <VersionLabel/>
       </div>
