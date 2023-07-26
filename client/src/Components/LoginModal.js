@@ -5,31 +5,38 @@ export default function(props){ //posso implementare la password
     const baseUrl = "http://localhost:5000/"
     const [error, setError] = useState('');
 
-    async function handleSubmitLogin(){
-        const nickname = document.querySelector('input[name="nickname"]').value
-        if(!validateNickname(nickname)){
-            //se il nickname supera i requisiti
-            if(await !checkNicknameDB(nickname)){
-                //non esiste un doppione
-                addNewPlayerApi()
-                props.setShowLoginModal(false)
-                props.setShowSelectorInitModal(true)
-                props.setLocalPlayerName(nickname)
+    async function handleSubmitLogin() {
+        setError('');
+        const nickname = document.querySelector('input[name="nickname"]').value;
+        
+        if (!validateNickname(nickname)) {
+          // Se il nickname supera i requisiti
+          try {
+            const nicknameExists = await checkNicknameDB(nickname);
+            
+            if (!nicknameExists) {
+              // Non esiste un doppione
+              addNewPlayerApi();
+              props.setShowLoginModal(false);
+              props.setShowSelectorInitModal(true);
+              props.setLocalPlayerName(nickname);
+            } else {
+              // Esiste un doppione
+              setError('Il nome è già stato creato.');
             }
-            else{
-                //esiste un doppione
-                setError('Il nome è già stato creato.');
-            }
+          } catch (error) {
+            console.error(error);
+          }
         }
-    }
+      }
+      
 
     async function checkNicknameDB(nickname){
         let ret = false;
         try{
             const response = await axios.get(`http://localhost:5000/api/check-nickname/${nickname}`)
-            if(response.data.exists===true){
-                ret = true;
-            }
+            ret = response.data.exists
+            console.log('ret: '+ret)
         }
         catch(error){
             console.error(error)
