@@ -132,7 +132,7 @@ export default function App(){
       else{
         console.log("Match NON creato")
         //creazione del polling per controllare ogni 4.5sec se c'è stato un match
-        pollingMatchId = setInterval(() => getMatchId(localPlayerId,pollingMatchId), 4500);
+        pollingMatchId = setInterval(() => getMatchId(localPlayerId,pollingMatchId), 500);
       }
     }
     catch(error){
@@ -146,20 +146,21 @@ export default function App(){
     try {
       const response = await axios.get(`http://localhost:5000/api/getMatchId/${playerId}`)
       if (response.data.match_id !== null) {
-        clearInterval(pollingMatchId);
         console.log("Match trovato!: " + response.data.match_id);
         setMatchId(response.data.match_id)
         try{
           const response2 = await axios.get(`http://localhost:5000/api/Match/getPlayer1Id/${response.data.match_id}`)
-          console.log("playerOpponentId: "+response2.data.player1_id)
+          const opponentPlayerId = response2.data.player1_id
+          console.log("playerOpponentId: "+opponentPlayerId)
           try{
-            const response3 = await axios.get(`http://localhost:5000/api/players/${response2.data.match.player1_id}`)
+            const response3 = await axios.get(`http://localhost:5000/api/players/${opponentPlayerId}`)
             console.log('opponent name: '+response3.data.nickname)
             setOpponentPlayerName(response3.data.nickname)
-            setOpponentPlayerId(response2.data.player1_id)
+            setOpponentPlayerId(opponentPlayerId)
             setShowLoadingModal(false)
             unBlurAll()
             notMyTurn()
+            clearInterval(pollingMatchId);
           }
           catch(error){
             console.error(error)
