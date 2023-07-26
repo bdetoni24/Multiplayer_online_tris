@@ -113,6 +113,12 @@ export default function App(){
     findOpponent()
   }
 
+  function myMove(){
+    setMyTurn(true)
+    //document.getElementById('localTimeBar').style.animation = "running"
+    //document.getElementById('opponentTimeBar').style.animation = "paused"
+  }
+
   async function findOpponent(){
     let pollingMatchId
     try{
@@ -126,7 +132,7 @@ export default function App(){
         console.log("--OPPONENT INFO--")
         console.log("\t-nome: "+response.data.nicknameOpponent)
         console.log("\t-id: "+response.data.playerIdOpponent)
-        setMyTurn(true)
+        myMove()
         unBlurAll()
       }
       else{
@@ -159,7 +165,7 @@ export default function App(){
             setOpponentPlayerId(opponentPlayerId)
             setShowLoadingModal(false)
             unBlurAll()
-            notMyTurn()
+            notMyMove()
             clearInterval(pollingMatchId);
           }
           catch(error){
@@ -178,7 +184,7 @@ export default function App(){
   }
 
   //funzione che si attiva quando non è il turno del local di gi
-  function notMyTurn(){
+  function notMyMove(){
     setMyTurn(false)
   }
 

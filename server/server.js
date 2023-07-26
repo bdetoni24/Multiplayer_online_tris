@@ -343,6 +343,30 @@ app.get('/api/players/:playerId', async (req, res) => {
   }
 });
 
+//api che controlla se è presente l'username e la sua password ----DA SISTEMARE
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    //cerca se esiste l'username
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid username' });
+    }
+
+    //controlla se la password è giusta
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    return res.json({ message: 'Login successful' });
+  }
+  catch (error) {
+    console.error('Error nel login:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 //controlla se un username è già presente nel database
 app.get('/api/check-nickname/:username', async (req, res) => {
   const { username } = req.params;

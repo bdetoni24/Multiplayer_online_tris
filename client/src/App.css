@@ -214,7 +214,7 @@ body{
   margin-left: 10px;
 }
 
-#localPlayerDashboard #timeBar{
+#localPlayerDashboard #localTimeBar{
   position: absolute;
   width: 200px;
   height: 10px;
@@ -253,7 +253,7 @@ body{
   margin-left: 10px;
 }
 
-#opponentPlayerDashboard #timeBar{
+#opponentPlayerDashboard #opponentTimeBar{
   position: absolute;
   width: 200px;
   height: 10px;
