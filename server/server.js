@@ -198,6 +198,29 @@ app.get('/api/Match/getPlayer1Id/:match_id', async (req, res) => {
   }
 });
 
+//dato un player_id ne aggiorna il valore lastonline
+app.put('/api/players/updateDate/:player_id', async (req, res) => {
+  try {
+    const playerId = req.params.player_id;
+
+    //trova ilo giocatore
+    const player = await Player.findByPk(playerId);
+
+    if (!player) {
+      //giocatore non esiste
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    //ne aggiorna la data con quella odierna
+    await player.update({ last_online: new Date() });
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 //dato player_id restituisce il valore di match_id
 app.get('/api/getMatchId/:player_id', async (req, res) => {
   const { player_id } = req.params;

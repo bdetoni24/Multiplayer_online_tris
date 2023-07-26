@@ -25,6 +25,7 @@ export default function App(){
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
   const [matchId,setMatchId] = useState(-1) //non occorre salvarlo in memoria? si per evitare che se si aggiorna si esce dal game
   const [myTurn,setMyTurn] = useState(false)
+  const [secondsRemaining,setSecondsRemaining] = useState(10)
 
   //funzione post caricamento pagina
   useEffect(() => {
@@ -64,6 +65,26 @@ export default function App(){
     console.log("localPlayerId: "+localPlayerId)
     console.log("---end INITIALIZATION---")
   },[])
+
+  //funzione attivata ad ogni cambio di turno e di secondi rimamenti
+  useEffect(() => {
+    if (myTurn && secondsRemaining > 0) {
+      const timer = setTimeout(() => setSecondsRemaining(secondsRemaining - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+    else if (myTurn && secondsRemaining === 0) {
+      handleTimeout();
+    }
+  }, [myTurn, secondsRemaining]);
+
+  //funzione avviata a fine timeout
+  const handleTimeout = () => {
+    console.log("fine tempo a disposizione")
+
+    document.getElementById('opponentTimeBar').style.animation = "running"
+    document.getElementById('localTimeBar').style.animation = "paused"
+    document.getElementById('localTimeBar').style.width = '0px'
+  };
 
   //
   function getLocalPlayerId(){
@@ -121,6 +142,7 @@ export default function App(){
 
   async function findOpponent(){
     let pollingMatchId
+    let pollingUpdateDateLastOnline
     try{
       const response = await axios.post(`http://localhost:5000/api/start-match/${localPlayerId}`)
       if(response.data.match){
@@ -139,7 +161,8 @@ export default function App(){
       else{
         console.log("Match NON creato")
         //creazione del polling per controllare ogni 4.5sec se c'è stato un match
-        pollingMatchId = setInterval(() => getMatchId(localPlayerId,pollingMatchId), 500)
+        pollingMatchId = setInterval(() => getMatchId(localPlayerId,pollingMatchId,pollingUpdateDateLastOnline), 500)
+        pollingUpdateDateLastOnline = setInterval(() => updateDateLastOnline(localPlayerId),4500)
       }
     }
     catch(error){
@@ -148,7 +171,17 @@ export default function App(){
     }
   }
 
-  async function getMatchId(playerId,pollingMatchId){
+  async function updateDateLastOnline(player_id){
+    try{
+      const response = axios.put(`http://localhost:5000/api/players/updateDate/${player_id}`)
+      console.log('aggiornamento della data in corso..')
+    }
+    catch (error){
+      console.error(error)
+    }
+  }
+
+  async function getMatchId(playerId,pollingMatchId,pollingUpdateDateLastOnline){
     console.log("---getMatchId() in esecuzione")
     try {
       const response = await axios.get(`http://localhost:5000/api/getMatchId/${playerId}`)
@@ -167,8 +200,9 @@ export default function App(){
             setShowLoadingModal(false)
             unBlurAll()
             notMyMove()
-            window.location.href += response.data.match.match_id
+            //window.location.href += response.data.match.match_id
             clearInterval(pollingMatchId)
+            clearInterval(pollingUpdateDateLastOnline)
           }
           catch(error){
             console.error(error)
@@ -247,8 +281,6 @@ export default function App(){
     document.getElementById("localPlayerDashboard").style.filter = blurFilter
     document.getElementById("opponentPlayerDashboard").style.filter = blurFilter
   }
-
- 
 
   return( 
     <div>
