@@ -5,28 +5,36 @@ export default function(props){ //posso implementare la password
     const baseUrl = "http://localhost:5000/"
     const [error, setError] = useState('');
 
-    function handleSubmitLogin(){
+    async function handleSubmitLogin(){
         const nickname = document.querySelector('input[name="nickname"]').value
         if(!validateNickname(nickname)){
             //se il nickname supera i requisiti
-            try{
-                const response = axios.get(`http://localhost:5000/api/check-nickname/${nickname}`)
-                if(response.data.exists===false){
-                    //non esiste un doppione
-                    addNewPlayerApi()
-                    props.setShowLoginModal(false)
-                    props.setShowSelectorInitModal(true)
-                    props.setLocalPlayerName(nickname)
-                }
-                else{
-                    //esiste un doppione
-                    setError('Il nome è già stato creato.');
-                }
+            if(await !checkNicknameDB(nickname)){
+                //non esiste un doppione
+                addNewPlayerApi()
+                props.setShowLoginModal(false)
+                props.setShowSelectorInitModal(true)
+                props.setLocalPlayerName(nickname)
             }
-            catch(error){
-                console.error(error)
+            else{
+                //esiste un doppione
+                setError('Il nome è già stato creato.');
             }
         }
+    }
+
+    async function checkNicknameDB(nickname){
+        let ret = false;
+        try{
+            const response = await axios.get(`http://localhost:5000/api/check-nickname/${nickname}`)
+            if(response.data.exists===true){
+                ret = true;
+            }
+        }
+        catch(error){
+            console.error(error)
+        }
+        return ret
     }
 
     async function addNewPlayerApi(){
@@ -63,10 +71,20 @@ export default function(props){ //posso implementare la password
         if (nick.length > 14) {
           setError('Il nome deve essere lungo al massimo 14 caratteri.');
           isError=true;
-        } else if (nick.includes(' ')) {
+        } 
+        else if (nick.includes(' ')) {
           setError('Il nome non può contenere spazi.');
           isError=true;
-        } else {
+        } 
+        else if(nick.length ==0){
+          setError('Il nome non può essere vuoto.');
+          isError=true;
+        }
+        else if(nick.length <3){
+          setError('Il nome deve avere minimo 3 caratteri.');
+          isError=true;
+        }
+        else {
           setError('');
         }
         return isError

@@ -353,8 +353,10 @@ app.get('/api/check-nickname/:username', async (req, res) => {
 
     if (player) {
       res.json({ exists: true });
+      console.log("nickname già presente")
     } else {
       res.json({ exists: false });
+      console.log("nickname non preente")
     }
   } catch (error) {
     console.error('Error checking username:', error);
