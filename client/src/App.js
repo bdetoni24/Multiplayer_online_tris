@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import Table from './Components/Table.js';
-import RecordTable from'./Components/RecordTable.js';
-import SelectorInitModal from './Components/SelectorInitModal.js';
-import LocalPlayerDashboard from './Components/LocalPlayerDashboard.js';
-import ExitButton from './Components/ExitButton.js';
-import VersionLabel from './Components/VersionLabel.js';
-import ShadowLayer from './Components/ShadowLayer.js';
+import React, { useState, useEffect } from 'react'
+import {useHistory} from 'react-router-dom'
+import './App.css'
+import Table from './Components/Table.js'
+import RecordTable from'./Components/RecordTable.js'
+import SelectorInitModal from './Components/SelectorInitModal.js'
+import LocalPlayerDashboard from './Components/LocalPlayerDashboard.js'
+import ExitButton from './Components/ExitButton.js'
+import VersionLabel from './Components/VersionLabel.js'
+import ShadowLayer from './Components/ShadowLayer.js'
 import OpponentPlayerDashBoard from './Components/OpponentPlayerDashBoard.js'
-import LoginModal from './Components/LoginModal.js';
-import LoadingModal from './Components/LoadingModal.js';
-import axios from 'axios';
+import LoginModal from './Components/LoginModal.js'
+import LoadingModal from './Components/LoadingModal.js'
+import axios from 'axios'
 
 export default function App(){
   //variabili e stati
@@ -19,16 +20,16 @@ export default function App(){
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [showLoginModal,setShowLoginModal] = useState(false)
   const [showLoadingModal,setShowLoadingModal] = useState(false)
-  const [localPlayerId,setLocalPlayerId] = useState(-1); //ERRORE
+  const [localPlayerId,setLocalPlayerId] = useState(-1) //ERRORE
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
-  const [opponentPlayerId,setOpponentPlayerId] = useState(-1);
+  const [opponentPlayerId,setOpponentPlayerId] = useState(-1)
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
   const [matchId,setMatchId] = useState(-1) //non occorre salvarlo in memoria? si per evitare che se si aggiorna si esce dal game
   const [myTurn,setMyTurn] = useState(false)
 
   //funzione post caricamento pagina
   useEffect(() => {
-    console.log("---INITIALIZATION---");
+    console.log("---INITIALIZATION---")
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
     const savedMatchId = parseInt(localStorage.getItem('matchId'),10)
@@ -46,24 +47,24 @@ export default function App(){
     //gestione del login
     if(getLocalPlayerId()==-1){
       //utente non è loggato 
-      console.log('utente non loggato');
-      setShowSelectorInitModal(false);
-      setShowLoginModal(true);
-      blurAll();
+      console.log('utente non loggato')
+      setShowSelectorInitModal(false)
+      setShowLoginModal(true)
+      blurAll()
     }
     else{
       //utente già loggato
-      console.log('utente loggato');
-      setShowSelectorInitModal(true);
-      setShowLoginModal(false);
-      blurAll();
-      getLocalPlayerNameApi(getLocalPlayerId());
+      console.log('utente loggato')
+      setShowSelectorInitModal(true)
+      setShowLoginModal(false)
+      blurAll()
+      getLocalPlayerNameApi(getLocalPlayerId())
 
       //gestione del match online (se il player è già dentro un match)
     }
     console.log("localPlayerId: "+localPlayerId)
-    console.log("---end INITIALIZATION---");
-  },[]);
+    console.log("---end INITIALIZATION---")
+  },[])
 
   //
   function getLocalPlayerId(){
@@ -83,18 +84,18 @@ export default function App(){
   async function getLocalPlayerNameApi (playerId) {
     try {
 
-      const response = await axios.get(`http://localhost:5000/api/players/${playerId}`);
-      setLocalPlayerName(response.data.nickname);
-      console.log(response.data.nickname);
+      const response = await axios.get(`http://localhost:5000/api/players/${playerId}`)
+      setLocalPlayerName(response.data.nickname)
+      console.log(response.data.nickname)
     } catch (error) {
-      console.error('Errore durante la chiamata API per il nickname dato il player_id:', error);
+      console.error('Errore durante la chiamata API per il nickname dato il player_id:', error)
     }
-  };
+  }
 
   async function logOut(){
     try{
-      const response = await axios.delete(`http://localhost:5000/api/players/delete/${localPlayerId}`);
-      console.log(response);
+      const response = await axios.delete(`http://localhost:5000/api/players/delete/${localPlayerId}`)
+      console.log(response)
     }
     catch (error){
       console.error(error)
@@ -108,7 +109,7 @@ export default function App(){
 
   //si attiva quando viene cliccato un new game
   function newGameSelected(){
-    setShowSelectorInitModal(false);
+    setShowSelectorInitModal(false)
     setShowLoadingModal(true)
     findOpponent()
   }
@@ -138,7 +139,7 @@ export default function App(){
       else{
         console.log("Match NON creato")
         //creazione del polling per controllare ogni 4.5sec se c'è stato un match
-        pollingMatchId = setInterval(() => getMatchId(localPlayerId,pollingMatchId), 500);
+        pollingMatchId = setInterval(() => getMatchId(localPlayerId,pollingMatchId), 500)
       }
     }
     catch(error){
@@ -152,7 +153,7 @@ export default function App(){
     try {
       const response = await axios.get(`http://localhost:5000/api/getMatchId/${playerId}`)
       if (response.data.match_id !== null) {
-        console.log("Match trovato!: " + response.data.match_id);
+        console.log("Match trovato!: " + response.data.match_id)
         setMatchId(response.data.match_id)
         try{
           const response2 = await axios.get(`http://localhost:5000/api/Match/getPlayer1Id/${response.data.match_id}`)
@@ -166,7 +167,7 @@ export default function App(){
             setShowLoadingModal(false)
             unBlurAll()
             notMyMove()
-            clearInterval(pollingMatchId);
+            clearInterval(pollingMatchId)
           }
           catch(error){
             console.error(error)
@@ -179,7 +180,7 @@ export default function App(){
         //initNewGame()
       }
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
@@ -195,14 +196,14 @@ export default function App(){
 
   //funzione attivata ad ogni cambio di valore di 'xWin'
   useEffect(() => {
-    console.log('+++++++++++salvataggio di xWin: ' + xWin);
+    console.log('+++++++++++salvataggio di xWin: ' + xWin)
     localStorage.setItem('xWin',xWin)
-  }, [xWin]);
+  }, [xWin])
 
   //funzione attivata ad ogni cambio di valore di 'oWin'
   useEffect(() => {
     localStorage.setItem('oWin',oWin)
-  }, [oWin]);
+  }, [oWin])
 
   //aggiunge una nuova vittoria al team X
   function newXWin(){
@@ -223,27 +224,27 @@ export default function App(){
   //toglie il blur a tutto
   function unBlurAll(){
     const blurFilter = ""
-    document.getElementById("mainTitle").style.filter = blurFilter;
-    document.getElementById("exitButton").style.filter = blurFilter; 
-    document.getElementById("recordTable").style.filter = blurFilter;
-    //document.getElementById("versionLabel").style.filter = blurFilter;
-    document.getElementById("exitButton").style.filter = blurFilter;
-    document.getElementById("mainTable").style.filter = blurFilter;
-    document.getElementById("localPlayerDashboard").style.filter = blurFilter;
-    document.getElementById("opponentPlayerDashboard").style.filter = blurFilter;
+    document.getElementById("mainTitle").style.filter = blurFilter
+    document.getElementById("exitButton").style.filter = blurFilter 
+    document.getElementById("recordTable").style.filter = blurFilter
+    //document.getElementById("versionLabel").style.filter = blurFilter
+    document.getElementById("exitButton").style.filter = blurFilter
+    document.getElementById("mainTable").style.filter = blurFilter
+    document.getElementById("localPlayerDashboard").style.filter = blurFilter
+    document.getElementById("opponentPlayerDashboard").style.filter = blurFilter
   }
 
   //mette il blur a tutto
   function blurAll(){
     const blurFilter = "blur(100px)"
-    document.getElementById("mainTitle").style.filter = blurFilter;
-    document.getElementById("exitButton").style.filter = blurFilter;
-    document.getElementById("recordTable").style.filter = blurFilter;
-    //document.getElementById("versionLabel").style.filter = blurFilter;
-    document.getElementById("exitButton").style.filter = blurFilter;
-    document.getElementById("mainTable").style.filter = blurFilter;
-    document.getElementById("localPlayerDashboard").style.filter = blurFilter;
-    document.getElementById("opponentPlayerDashboard").style.filter = blurFilter;
+    document.getElementById("mainTitle").style.filter = blurFilter
+    document.getElementById("exitButton").style.filter = blurFilter
+    document.getElementById("recordTable").style.filter = blurFilter
+    //document.getElementById("versionLabel").style.filter = blurFilter
+    document.getElementById("exitButton").style.filter = blurFilter
+    document.getElementById("mainTable").style.filter = blurFilter
+    document.getElementById("localPlayerDashboard").style.filter = blurFilter
+    document.getElementById("opponentPlayerDashboard").style.filter = blurFilter
   }
 
  
@@ -270,5 +271,5 @@ export default function App(){
       </div>
 
     </div>
-    );
-};
+    )
+}
