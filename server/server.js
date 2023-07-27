@@ -180,6 +180,30 @@ Match.belongsTo(Player, { foreignKey: 'player1_id', as: 'player1' });
 Match.belongsTo(Player, { foreignKey: 'player2_id', as: 'player2' });
 Match.hasOne(HistoryGame, { foreignKey: 'match_id', as: 'historyGame' });
 
+//funzione che cambia il matchId
+app.put('api/players/updatePartyId/:player_id', async (req, res) => {
+  try {
+    const { player_id } = req.params;
+    const { party_id } = req.body;
+
+    //controlla se il player esiste
+    const player = await Player.findByPk(player_id);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    //ne cambia il playerid
+    player.party_id = party_id;
+    await player.save();
+
+    return res.status(200).json({ message: 'Player party_id updated successfully' });
+  } catch (error) {
+    console.error('Error updating party_id:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 //api che permette di inviare i dati della table
 app.put('/api/history-game/putData/:match_id', async (req,res)=> {
   console.log("START SENDING DATA TABLE")

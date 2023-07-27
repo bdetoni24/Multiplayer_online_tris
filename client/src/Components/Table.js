@@ -11,17 +11,7 @@ export default function Table(props){
   const [rematchVisible, setRematchVisible] = useState(false)
   const [labelWinner,setLabelWinner] = useState('')
   const char = 'o'
-  const [clickedCells,setClickedCells] = useState([
-    {team: 0},
-    {team: 0},
-    {team: 0},
-    {team: 0},
-    {team: 0},
-    {team: 0},
-    {team: 0},
-    {team: 0},
-    {team: 0},
-  ])
+  let [clickedCells,setClickedCells] = useState([0,0,0,0,0,0,0,0,0])
   
   let team=false;
   let nClick=0; //per fermare il game in caso di pareggio
@@ -37,16 +27,16 @@ export default function Table(props){
   }
   
   //traduce i dati dellì'api in quelli in locale
-  function convertFromHistoryGameFormat(historyGameData) {
-    clickedCells = [];
+  function convertFromHistoryGameFormat(historyGameData) { //TESTATA
+    clickedCells = [,,,,,,,,];
   
     for (let i = 0; i < 9; i++) {
       const cellKey = `status_cell${i + 1}`;
       const team = historyGameData[cellKey] || 0; //imposta team a 0 se la chiave non esiste
   
-      clickedCells.push({ team });
-      console.log('dati api tradotti in locale: '+clickedCells)
+      clickedCells[i]=team;
     }
+    console.log('dati api tradotti in locale: '+clickedCells)
   }
 
   //funzione che invia i dati delle celle attuali UPLOAD
@@ -70,16 +60,17 @@ export default function Table(props){
   
     for (let i = 0; i < clickedCells.length; i++) {
       const cellKey = `status_cell${i + 1}`;
-      historyGameData[cellKey] = clickedCells[i].team;
-      console.log('dati locali tradotti in  formato api')
+      historyGameData[cellKey] = clickedCells[i];
     }
+    
+    console.log('dati locali tradotti in  formato api: '+historyGameData)
   
     return historyGameData;
   }
 
   function isCellClicked(nCell){
     let ret=false;
-    if(clickedCells[nCell].team!=0){
+    if(clickedCells[nCell]!=0){
       ret=true
     }
     return ret
@@ -88,7 +79,7 @@ export default function Table(props){
   //funzione per preparare il gioco ad una nuova partita
   function tableRematch(){
     for(let i=0;i<=8;i++){
-      clickedCells[i].team=0;
+      clickedCells[i]=0;
       let cell = document.getElementById((i+1).toString())
       cell.innerHTML = '';
       cell.style.backgroundColor = "white"
@@ -109,7 +100,7 @@ export default function Table(props){
       let cell = document.getElementById(nCella)
 
       //modifica grafica al click
-      clickedCells[nCella-1].team=1;
+      clickedCells[nCella-1]=1;
       cell.style.color = "green"
       checkWinner(1,"green");
       cell.innerHTML = char
@@ -124,7 +115,7 @@ export default function Table(props){
     let ret = false;
     if(nClick<=9){
       //Combinazioni verticali
-      if(Object.is(clickedCells[0].team, team) && Object.is(clickedCells[3].team, team) && Object.is(clickedCells[6].team, team)){
+      if(Object.is(clickedCells[0], team) && Object.is(clickedCells[3], team) && Object.is(clickedCells[6], team)){
         ret=true
         document.getElementById("1").style.backgroundColor=color
         document.getElementById("4").style.backgroundColor=color
@@ -133,7 +124,7 @@ export default function Table(props){
         document.getElementById("4").style.color="white"
         document.getElementById("7").style.color="white"
       }
-      if(Object.is(clickedCells[1].team, team) && Object.is(clickedCells[4].team, team) && Object.is(clickedCells[7].team, team)){
+      if(Object.is(clickedCells[1], team) && Object.is(clickedCells[4], team) && Object.is(clickedCells[7], team)){
         ret=true
         document.getElementById("2").style.backgroundColor=color
         document.getElementById("5").style.backgroundColor=color
@@ -142,7 +133,7 @@ export default function Table(props){
         document.getElementById("5").style.color="white"
         document.getElementById("8").style.color="white"
       }
-      if(Object.is(clickedCells[2].team, team) && Object.is(clickedCells[5].team, team) && Object.is(clickedCells[8].team, team)){
+      if(Object.is(clickedCells[2], team) && Object.is(clickedCells[5], team) && Object.is(clickedCells[8], team)){
         ret=true
         document.getElementById("3").style.backgroundColor=color
         document.getElementById("6").style.backgroundColor=color
@@ -153,7 +144,7 @@ export default function Table(props){
       }
   
       //Combinazioni orizzontali
-      if(Object.is(clickedCells[0].team, team) && Object.is(clickedCells[1].team, team) && Object.is(clickedCells[2].team, team)){
+      if(Object.is(clickedCells[0], team) && Object.is(clickedCells[1], team) && Object.is(clickedCells[2], team)){
         ret=true
         document.getElementById("1").style.backgroundColor=color
         document.getElementById("2").style.backgroundColor=color
@@ -162,7 +153,7 @@ export default function Table(props){
         document.getElementById("2").style.color="white"
         document.getElementById("3").style.color="white"
       }
-      if(Object.is(clickedCells[3].team, team) && Object.is(clickedCells[4].team, team) && Object.is(clickedCells[5].team, team)){
+      if(Object.is(clickedCells[3], team) && Object.is(clickedCells[4], team) && Object.is(clickedCells[5], team)){
         ret=true
         document.getElementById("4").style.backgroundColor=color
         document.getElementById("5").style.backgroundColor=color
@@ -171,7 +162,7 @@ export default function Table(props){
         document.getElementById("5").style.color="white"
         document.getElementById("6").style.color="white"
       }
-      if(Object.is(clickedCells[6].team, team) && Object.is(clickedCells[7].team, team) && Object.is(clickedCells[8].team, team)){
+      if(Object.is(clickedCells[6], team) && Object.is(clickedCells[7], team) && Object.is(clickedCells[8], team)){
         ret=true
         document.getElementById("7").style.backgroundColor=color
         document.getElementById("8").style.backgroundColor=color
@@ -181,7 +172,7 @@ export default function Table(props){
         document.getElementById("9").style.color="white"
       }
       //Combinazioni diagonali
-       if(Object.is(clickedCells[0].team, team) && Object.is(clickedCells[4].team, team) && Object.is(clickedCells[8].team, team)){
+       if(Object.is(clickedCells[0], team) && Object.is(clickedCells[4], team) && Object.is(clickedCells[8], team)){
           ret=true
           document.getElementById("1").style.backgroundColor=color
           document.getElementById("5").style.backgroundColor=color
@@ -190,7 +181,7 @@ export default function Table(props){
           document.getElementById("5").style.color="white"
           document.getElementById("9").style.color="white"
         }
-        if(Object.is(clickedCells[2].team, team) && Object.is(clickedCells[4].team, team) && Object.is(clickedCells[6].team, team)){
+        if(Object.is(clickedCells[2], team) && Object.is(clickedCells[4], team) && Object.is(clickedCells[6], team)){
           ret=true
           document.getElementById("3").style.backgroundColor=color
           document.getElementById("5").style.backgroundColor=color

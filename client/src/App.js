@@ -75,6 +75,8 @@ export default function App(){
     console.log("---end INITIALIZATION---")
   },[])
 
+
+
   //funzione attivata ad ogni cambiamento di localPlayerId
   useEffect(() => {
     localStorage.setItem('localPlayer_id',localPlayerId)

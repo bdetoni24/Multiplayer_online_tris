@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 
 const SelectorInitModal = (props) => {
 
@@ -14,6 +15,16 @@ const SelectorInitModal = (props) => {
     props.newGameSelected()
   }
 
+  async function handleSubmitCreateParty(){ //da sistemare per pary id
+    try{
+      //const response = await axios.put(`http://localhost:5000/api/players/updatePartyId/${player_id}`,{ party_id: partyId })
+
+    }
+    catch (error){
+
+    }
+  }
+
   return (
     <>
       <div className="selectorInitModal">
@@ -24,8 +35,8 @@ const SelectorInitModal = (props) => {
           <button onClick={handleSubmitNewGame}>New Game</button>
           <button disabled onClick={handleSubmit}>Play Local</button>
           <div id="partyMenu">
-            <button disabled onClick={handleSubmit}>Enter a Party</button>
-            <button disabled onClick={handleSubmit}>Create Party</button>
+            <button onClick={handleSubmitCreateParty}>Enter a Party</button>
+            <button onClick={handleSubmit}>Create Party</button>
           </div>
         </div>
         <div>
