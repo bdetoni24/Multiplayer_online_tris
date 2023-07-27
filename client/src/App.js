@@ -20,13 +20,16 @@ export default function App(){
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [showLoginModal,setShowLoginModal] = useState(false)
   const [showLoadingModal,setShowLoadingModal] = useState(false)
-  const [localPlayerId,setLocalPlayerId] = useState(-1) //ERRORE
+  const [localPlayerId,setLocalPlayerId] = useState() //ERRORE
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1)
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
   const [matchId,setMatchId] = useState(-1) //non occorre salvarlo in memoria? si per evitare che se si aggiorna si esce dal game
   const [myTurn,setMyTurn] = useState(false)
   const [secondsRemaining,setSecondsRemaining] = useState(10)
+  const url2 = new URL('http://localhost:3000/')
+  const history = window.history;
+  let timer
 
   //funzione post caricamento pagina
   useEffect(() => {
@@ -67,15 +70,19 @@ export default function App(){
     console.log("---end INITIALIZATION---")
   },[])
 
-  //funzione attivata ad ogni cambio di turno e di secondi rimamenti
+  //funzione attivata ad ogni cambio di turno e di secondi rimamenti §(posso integrare tutto dentro un component timer)
   useEffect(() => {
     if (myTurn && secondsRemaining > 0) {
-      const timer = setTimeout(() => setSecondsRemaining(secondsRemaining - 1), 1000);
-      return () => clearTimeout(timer);
+      timer = setTimeout(() => setSecondsRemaining(secondsRemaining - 1), 1000)
+      console.log('secondi rimanenti: '+secondsRemaining)
     }
     else if (myTurn && secondsRemaining === 0) {
-      handleTimeout();
+      handleTimeout()
+      notMyMove()
     }
+
+    //codice da eseguire in caso di componente smontato
+    return () => clearTimeout(timer);
   }, [myTurn, secondsRemaining]);
 
   //funzione avviata a fine timeout
@@ -86,6 +93,8 @@ export default function App(){
     document.getElementById('localTimeBar').style.animation = "paused"
     document.getElementById('localTimeBar').style.width = '0px'
   };
+
+  //
 
   //
   function getLocalPlayerId(){
@@ -145,7 +154,7 @@ export default function App(){
     let pollingMatchId
     let pollingUpdateDateLastOnline
     try{
-      const response = await axios.post(`http://localhost:5000/api/start-match/${localPlayerId}`)
+      const response = await axios.post(`http://localhost:5000/api/start-match/${localPlayerId}`) //il localplayerId rimane -1
       if(response.data.match){
         //se viene creato un match
         console.log("Match creato: "+response.data.match.match_id)
@@ -155,6 +164,10 @@ export default function App(){
         console.log("--OPPONENT INFO--")
         console.log("\t-nome: "+response.data.nicknameOpponent)
         console.log("\t-id: "+response.data.playerIdOpponent)
+        url2.searchParams.set('matchId',response.data.match.match_id)
+        console.log(url2.search)
+        
+        history.pushState({}, null, url2);
         myMove()
         unBlurAll()
       }
@@ -181,6 +194,7 @@ export default function App(){
     }
   }
 
+  //serve per fare il polling se non si è trovato un'altro giocatore online
   async function getMatchId(playerId,pollingMatchId,pollingUpdateDateLastOnline){
     console.log("---getMatchId() in esecuzione")
     try {
@@ -200,6 +214,10 @@ export default function App(){
             setShowLoadingModal(false)
             unBlurAll()
             notMyMove()
+            url2.searchParams.set('matchId',response.data.match_id)
+            console.log(url2.search)
+            
+            history.pushState({}, null, url2);
             clearInterval(pollingMatchId)
             clearInterval(pollingUpdateDateLastOnline)
           }

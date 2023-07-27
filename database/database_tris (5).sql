@@ -1,0 +1,211 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jul 27, 2023 at 09:37 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `database_tris`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history_game`
+--
+
+CREATE TABLE `history_game` (
+  `history_match_id` int(11) NOT NULL COMMENT 'History match primary key',
+  `match_id` int(11) DEFAULT NULL COMMENT 'Referes to the match',
+  `status_cell1` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet',
+  `status_cell2` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet',
+  `status_cell3` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet',
+  `status_cell4` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet',
+  `status_cell5` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet',
+  `status_cell6` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet',
+  `status_cell7` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet',
+  `status_cell8` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet',
+  `status_cell9` int(11) DEFAULT NULL COMMENT 'This parameter shows witch player clicked it, if it''s null means that the cell isn''t being clicked yet'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Represents the state of the Tris table during an ongoing gam';
+
+--
+-- Dumping data for table `history_game`
+--
+
+INSERT INTO `history_game` (`history_match_id`, `match_id`, `status_cell1`, `status_cell2`, `status_cell3`, `status_cell4`, `status_cell5`, `status_cell6`, `status_cell7`, `status_cell8`, `status_cell9`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `matches`
+--
+
+CREATE TABLE `matches` (
+  `match_id` int(11) NOT NULL COMMENT 'Unique match ID',
+  `player1_id` int(11) DEFAULT NULL COMMENT 'Foreign key of player 1''s id',
+  `player2_id` int(11) DEFAULT NULL COMMENT 'Foreign key of player 2''s id',
+  `history_match_id` int(11) DEFAULT NULL COMMENT 'Foreign key of an history match to store the table''s status',
+  `points_p1` int(11) NOT NULL DEFAULT 0 COMMENT 'Player 1''s points',
+  `points_p2` int(11) NOT NULL DEFAULT 0 COMMENT 'Player 2''s points',
+  `is_end_match` tinyint(1) NOT NULL DEFAULT 0,
+  `is_end_game` tinyint(1) NOT NULL DEFAULT 0,
+  `play_again` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'attribute that allow a regame in the match',
+  `player_id_turn` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Represents created matches in the system.';
+
+--
+-- Dumping data for table `matches`
+--
+
+INSERT INTO `matches` (`match_id`, `player1_id`, `player2_id`, `history_match_id`, `points_p1`, `points_p2`, `is_end_match`, `is_end_game`, `play_again`, `player_id_turn`) VALUES
+(46, 192, 193, NULL, 0, 0, 0, 0, 0, 192),
+(48, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL),
+(49, 198, 199, NULL, 0, 0, 0, 0, 0, 198),
+(50, 200, 201, NULL, 0, 0, 0, 0, 0, 200);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `players`
+--
+
+CREATE TABLE `players` (
+  `player_id` int(11) NOT NULL COMMENT 'Player''s primary key',
+  `nickname` text NOT NULL COMMENT 'Player''s nickname',
+  `password` text NOT NULL COMMENT 'it''s the user password',
+  `match_id` int(11) DEFAULT NULL COMMENT 'This parameter shows in witch match the player are in. If the parameter is empty means the player isn''t in a match yet.',
+  `party_id` int(11) DEFAULT NULL,
+  `is_online` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'this value check if the player wants to join an online match',
+  `last_online` datetime NOT NULL DEFAULT current_timestamp() COMMENT 'value to check if the player is online in recent seconds'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Represents registered players in the system. Each player has';
+
+--
+-- Dumping data for table `players`
+--
+
+INSERT INTO `players` (`player_id`, `nickname`, `password`, `match_id`, `party_id`, `is_online`, `last_online`) VALUES
+(1, 'admin', '1234', NULL, NULL, 0, '2023-07-26 13:42:19'),
+(188, 'bernardo1', '1234', NULL, NULL, 0, '2023-07-27 06:32:29'),
+(191, 'bernardo2', '1234', NULL, NULL, 0, '2023-07-27 06:35:28'),
+(192, '231', '1234', 46, NULL, 0, '2023-07-27 06:42:08'),
+(193, '4334', '1234', 46, NULL, 0, '2023-07-27 06:42:35'),
+(194, '4556633', '1234', NULL, NULL, 0, '2023-07-27 07:06:47'),
+(195, '3434', '1234', NULL, NULL, 1, '2023-07-27 07:06:51'),
+(198, '4444', '1234', 49, NULL, 0, '2023-07-27 07:08:48'),
+(199, '5555', '1234', 49, NULL, 0, '2023-07-27 07:08:56'),
+(200, '66666', '1234', 50, NULL, 0, '2023-07-27 07:11:19'),
+(201, '777', '1234', 50, NULL, 0, '2023-07-27 07:11:25');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `history_game`
+--
+ALTER TABLE `history_game`
+  ADD PRIMARY KEY (`history_match_id`),
+  ADD KEY `status_cell1` (`status_cell1`),
+  ADD KEY `status_cell2` (`status_cell2`),
+  ADD KEY `status_cell3` (`status_cell3`),
+  ADD KEY `status_cell4` (`status_cell4`),
+  ADD KEY `status_cell5` (`status_cell5`),
+  ADD KEY `status_cell6` (`status_cell6`),
+  ADD KEY `status_cell7` (`status_cell7`),
+  ADD KEY `status_cell8` (`status_cell8`),
+  ADD KEY `status_cell9` (`status_cell9`),
+  ADD KEY `match_id` (`match_id`);
+
+--
+-- Indexes for table `matches`
+--
+ALTER TABLE `matches`
+  ADD PRIMARY KEY (`match_id`),
+  ADD KEY `history_match_id` (`history_match_id`),
+  ADD KEY `player1_id` (`player1_id`),
+  ADD KEY `player2_id` (`player2_id`),
+  ADD KEY `player_id_turn` (`player_id_turn`);
+
+--
+-- Indexes for table `players`
+--
+ALTER TABLE `players`
+  ADD PRIMARY KEY (`player_id`),
+  ADD KEY `match_id` (`match_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `history_game`
+--
+ALTER TABLE `history_game`
+  MODIFY `history_match_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'History match primary key', AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `matches`
+--
+ALTER TABLE `matches`
+  MODIFY `match_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique match ID', AUTO_INCREMENT=51;
+
+--
+-- AUTO_INCREMENT for table `players`
+--
+ALTER TABLE `players`
+  MODIFY `player_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Player''s primary key', AUTO_INCREMENT=202;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `history_game`
+--
+ALTER TABLE `history_game`
+  ADD CONSTRAINT `match_id` FOREIGN KEY (`match_id`) REFERENCES `matches` (`match_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell1` FOREIGN KEY (`status_cell1`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell2` FOREIGN KEY (`status_cell2`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell3` FOREIGN KEY (`status_cell3`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell4` FOREIGN KEY (`status_cell4`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell5` FOREIGN KEY (`status_cell5`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell6` FOREIGN KEY (`status_cell6`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell7` FOREIGN KEY (`status_cell7`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell8` FOREIGN KEY (`status_cell8`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `status_cell9` FOREIGN KEY (`status_cell9`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `matches`
+--
+ALTER TABLE `matches`
+  ADD CONSTRAINT `history_match_id` FOREIGN KEY (`history_match_id`) REFERENCES `history_game` (`history_match_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `player1_id` FOREIGN KEY (`player1_id`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `player2_id` FOREIGN KEY (`player2_id`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `player_id_turn` FOREIGN KEY (`player_id_turn`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `players`
+--
+ALTER TABLE `players`
+  ADD CONSTRAINT `players_ibfk_1` FOREIGN KEY (`match_id`) REFERENCES `matches` (`match_id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
