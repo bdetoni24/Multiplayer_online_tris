@@ -155,7 +155,6 @@ export default function App(){
         console.log("--OPPONENT INFO--")
         console.log("\t-nome: "+response.data.nicknameOpponent)
         console.log("\t-id: "+response.data.playerIdOpponent)
-        window.location.href += response.data.match.match_id
         myMove()
         unBlurAll()
       }
@@ -201,7 +200,6 @@ export default function App(){
             setShowLoadingModal(false)
             unBlurAll()
             notMyMove()
-            //window.location.href += response.data.match.match_id
             clearInterval(pollingMatchId)
             clearInterval(pollingUpdateDateLastOnline)
           }
