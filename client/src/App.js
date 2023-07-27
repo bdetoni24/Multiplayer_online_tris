@@ -20,11 +20,11 @@ export default function App(){
   const [showSelectorInitModal,setShowSelectorInitModal] = useState(false)
   const [showLoginModal,setShowLoginModal] = useState(false)
   const [showLoadingModal,setShowLoadingModal] = useState(false)
-  const [localPlayerId,setLocalPlayerId] = useState() //ERRORE
+  let [localPlayerId,setLocalPlayerId] = useState(-1) //ERRORE
   const [localPlayerName,setLocalPlayerName] = useState("player_name")
   const [opponentPlayerId,setOpponentPlayerId] = useState(-1)
   const [opponentPlayerName,setOpponentPlayerName] = useState("opponent_name")
-  const [matchId,setMatchId] = useState(-1) //non occorre salvarlo in memoria? si per evitare che se si aggiorna si esce dal game
+  let [matchId,setMatchId] = useState(-1) //non occorre salvarlo in memoria? si per evitare che se si aggiorna si esce dal game
   const [myTurn,setMyTurn] = useState(false)
   const [secondsRemaining,setSecondsRemaining] = useState(10)
   const url2 = new URL('http://localhost:3000/')
@@ -32,12 +32,12 @@ export default function App(){
   let timer
 
   //funzione post caricamento pagina
-  useEffect(() => {
+  useEffect(() => { //FARE CONTROLLO CHE NON SIA GIà DENTRO UN MATCH
     console.log("---INITIALIZATION---")
     const savedXWin = parseInt(localStorage.getItem('xWin'), 10)
     const savedOWin = parseInt(localStorage.getItem('oWin'), 10)
-    const savedMatchId = parseInt(localStorage.getItem('matchId'),10)
-    //const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayerId'),10)
+    const savedMatchId = parseInt(localStorage.getItem('matchId'),10) //posso anche andarlo a prendere come parametro
+    const savedLocalPlayerId = parseInt(localStorage.getItem('localPlayer_id'),10)
     if(savedXWin){
       setXWin(savedXWin)
     }
@@ -46,10 +46,15 @@ export default function App(){
     }
     if(savedMatchId){
       setMatchId(savedMatchId)
+      matchId = savedMatchId 
+    }
+    if(savedLocalPlayerId){
+      setLocalPlayerId(savedLocalPlayerId)
+      localPlayerId = savedLocalPlayerId
     }
 
     //gestione del login
-    if(getLocalPlayerId()==-1){
+    if(localPlayerId==-1){
       //utente non è loggato 
       console.log('utente non loggato')
       setShowSelectorInitModal(false)
@@ -62,13 +67,18 @@ export default function App(){
       setShowSelectorInitModal(true)
       setShowLoginModal(false)
       blurAll()
-      getLocalPlayerNameApi(getLocalPlayerId())
+      getLocalPlayerNameApi(localPlayerId)
 
       //gestione del match online (se il player è già dentro un match)
     }
     console.log("localPlayerId: "+localPlayerId)
     console.log("---end INITIALIZATION---")
   },[])
+
+  //funzione attivata ad ogni cambiamento di localPlayerId
+  useEffect(() => {
+    localStorage.setItem('localPlayer_id',localPlayerId)
+  }, [localPlayerId]);
 
   //funzione attivata ad ogni cambio di turno e di secondi rimamenti §(posso integrare tutto dentro un component timer)
   useEffect(() => {
@@ -86,29 +96,19 @@ export default function App(){
   }, [myTurn, secondsRemaining]);
 
   //funzione avviata a fine timeout
-  const handleTimeout = () => {
-    console.log("fine tempo a disposizione")
+  async function handleTimeout() {
+    console.log("FINE TEMPO A DISPOZIONE")
+
+    //impostare il turno al giocatore dopo
+    const response = await axios.post(`http://localhost:5000/api/matches/${matchId}/update-player-turn/${opponentPlayerId}`)
+    console.log(response.data.message)
+    notMyMove()
 
     document.getElementById('opponentTimeBar').style.animation = "running"
     document.getElementById('localTimeBar').style.animation = "paused"
     document.getElementById('localTimeBar').style.width = '0px'
   };
 
-  //
-
-  //
-  function getLocalPlayerId(){
-    if(localStorage.getItem('localPlayerId')){
-      return parseInt(localStorage.getItem('localPlayerId'),10)
-    }
-    else{
-      return -1
-    }
-  }
-
-  function setSetLocalPlayerId(id){
-    localStorage.setItem('localPlayerId',parseInt(id),10)
-  }
 
   //serve a prendere il nickname dato il player_id
   async function getLocalPlayerNameApi (playerId) {
@@ -132,7 +132,7 @@ export default function App(){
     }
     setShowLoginModal(true)
     setShowSelectorInitModal(false)
-    setSetLocalPlayerId(-1)
+    setLocalPlayerId(-1)
     setLocalPlayerName("player_name")
     console.log("logOut....")
   }
@@ -144,13 +144,10 @@ export default function App(){
     findOpponent()
   }
 
-  function myMove(){
-    setMyTurn(true)
-    //document.getElementById('localTimeBar').style.animation = "running"
-    //document.getElementById('opponentTimeBar').style.animation = "paused"
-  }
+
 
   async function findOpponent(){
+    console.log('find opponent')
     let pollingMatchId
     let pollingUpdateDateLastOnline
     try{
@@ -158,6 +155,8 @@ export default function App(){
       if(response.data.match){
         //se viene creato un match
         console.log("Match creato: "+response.data.match.match_id)
+        setMatchId(response.data.match.match_id)
+        matchId = response.data.match.match_id
         setOpponentPlayerName(response.data.nicknameOpponent)
         setOpponentPlayerId(response.data.playerIdOpponent)
         setShowLoadingModal(false)
@@ -198,25 +197,36 @@ export default function App(){
   async function getMatchId(playerId,pollingMatchId,pollingUpdateDateLastOnline){
     console.log("---getMatchId() in esecuzione")
     try {
+      //serve ad ottenere il match_id
       const response = await axios.get(`http://localhost:5000/api/getMatchId/${playerId}`)
+
+      //controllo che esiste il match
       if (response.data.match_id !== null) {
         console.log("Match trovato!: " + response.data.match_id)
         setMatchId(response.data.match_id)
+        matchId = response.data.match_id
+
+        //ottengo il player_id dell'avversario
         try{
           const response2 = await axios.get(`http://localhost:5000/api/Match/getPlayer1Id/${response.data.match_id}`)
           const opponentPlayerId = response2.data.player1_id
           console.log("playerOpponentId: "+opponentPlayerId)
+
+          //ottengo il nome dell'avversario
           try{
             const response3 = await axios.get(`http://localhost:5000/api/players/${opponentPlayerId}`)
             console.log('opponent name: '+response3.data.nickname)
             setOpponentPlayerName(response3.data.nickname)
             setOpponentPlayerId(opponentPlayerId)
             setShowLoadingModal(false)
+
+            //cambio schermata
             unBlurAll()
             notMyMove()
+
+            //cambio dell'url mettendo un nuovo parametro
             url2.searchParams.set('matchId',response.data.match_id)
             console.log(url2.search)
-            
             history.pushState({}, null, url2);
             clearInterval(pollingMatchId)
             clearInterval(pollingUpdateDateLastOnline)
@@ -236,9 +246,81 @@ export default function App(){
     }
   }
 
+  //funzione che fa fetch per vedere quando è il turno del local
+  async function fetchMyTurn(currentTime,polling){
+    console.log("fetching myTurn")
+    if(currentTime-((new Date().getTime())/1000)<15){
+      try{
+        const response = await axios.get(`http://localhost:5000/api/check-turn/${matchId}/${localPlayerId}`)
+        const isMyTurn = response.data.message
+        console.log("isMyTurn: "+isMyTurn)
+  
+        if(isMyTurn){
+          console.log("E' il mio turno di giocare")
+          myMove(polling)
+
+        }
+        else{
+          console.error(response.data.message)
+        }
+      }
+      catch(error){
+        console.error(error)
+      }
+    }
+    else{
+      //non risponde più il player avversario (si è disconnesso in modo anomalo)
+      clearInterval(polling)
+      console.log("il player avversario non risponde da 15 secondi")
+    }
+  }
+
   //funzione che si attiva quando non è il turno del local di gi
   function notMyMove(){
+    fetchPoints()
     setMyTurn(false)
+
+    //cambio del cursore
+    document.getElementById('mainTable').style.cursor = 'not-allowed'
+
+    //far ripartire il polling per vedere se è arrivato il mio turno
+    const currentTime = (new Date().getTime())/1000
+    const pollingFetchMyTurn = setInterval(() => {fetchMyTurn(currentTime,pollingFetchMyTurn)},500)
+  }
+
+  //controlla il punteggio
+  async function fetchPoints(){
+    try{
+      const response = await axios.get(`http://localhost:5000/api/match/getPoints/${matchId}`)
+      console.log("Fetch points: p1="+response.data.points_p1+" p2="+response.data.points_p2)
+      
+      //imposto il punteggio 
+      setOWin(response.data.points_p1)
+      setXWin(response.data.points_p2)
+    }
+    catch (error){
+      console.error(error)
+    }
+  }
+
+  //funzione attivata quando tocca a fare la mossa
+  function myMove(pollingFetchMyTurn){
+    setMyTurn(true)
+
+    //cambio del puntatore sopra la table
+    document.getElementById('mainTable').style.cursor = 'pointer'
+
+    //controllo del punteggio
+    fetchPoints()
+
+    //far partire il polling per iltimer di scadenza
+    
+    setSecondsRemaining(10)
+    clearInterval(pollingFetchMyTurn)
+
+    //cambiare le dashboard
+    //document.getElementById('localTimeBar').style.animation = "running"
+    //document.getElementById('opponentTimeBar').style.animation = "paused"
   }
 
   //funzione che istanzia

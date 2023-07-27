@@ -9,9 +9,7 @@ export default function Table(props){
   const [isEndGame,setIsEndGame] = useState(false);
   const [rematchVisible, setRematchVisible] = useState(false)
   const [labelWinner,setLabelWinner] = useState('')
-  let team=false;
-  let nClick=0; //per fermare il game in caso di pareggio
-  let clickedCells = [
+  const [clickedCells,setClickedCells] = useState([
     {id:1, clicked:false, team: 0},
     {id:2, clicked:false, team: 0},
     {id:3, clicked:false, team: 0},
@@ -21,7 +19,14 @@ export default function Table(props){
     {id:7, clicked:false, team: 0},
     {id:8, clicked:false, team: 0},
     {id:9, clicked:false, team: 0},
-  ];
+  ])
+  let team=false;
+  let nClick=0; //per fermare il game in caso di pareggio
+
+  //funzione che esegue il fetch dei dati delle caselle (per quelle con un dato bisogna chiamare table ckicked)
+  function fetchCells(){
+
+  }
   
   //funzione per preparare il gioco ad una nuova partita
   function tableRematch(){
