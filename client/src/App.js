@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import './App.css'
-import Table from './Components/Table.js'
-import RecordTable from'./Components/RecordTable.js'
-import SelectorInitModal from './Components/SelectorInitModal.js'
-import LocalPlayerDashboard from './Components/LocalPlayerDashboard.js'
-import ExitButton from './Components/ExitButton.js'
-import VersionLabel from './Components/VersionLabel.js'
-import ShadowLayer from './Components/ShadowLayer.js'
+
 import OpponentPlayerDashBoard from './Components/OpponentPlayerDashBoard.js'
-import LoginModal from './Components/LoginModal.js'
+import LocalPlayerDashboard from './Components/LocalPlayerDashboard.js'
+import SelectorInitModal from './Components/SelectorInitModal.js'
+import VersionLabel from './Components/VersionLabel.js'
 import LoadingModal from './Components/LoadingModal.js'
+import ShadowLayer from './Components/ShadowLayer.js'
+import React, { useState, useEffect } from 'react'
+import RecordTable from'./Components/RecordTable.js'
+import ExitButton from './Components/ExitButton.js'
+import LoginModal from './Components/LoginModal.js'
+import Table from './Components/Table.js'
 import axios from 'axios'
+import './App.css'
 
 export default function App(){
   //variabili e stati

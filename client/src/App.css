@@ -317,7 +317,7 @@ body{
 }
 
 /*VERSION LABEL*/
-#versionLabel{
+#versionLabel{ 
   z-index: 100;
   position: absolute;
   bottom: 0;
