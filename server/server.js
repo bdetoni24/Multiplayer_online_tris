@@ -186,31 +186,24 @@ app.put('/api/history-game/putData/:match_id', async (req,res)=> {
   try {
     const matchId = req.params.match_id;
     const updatedData = req.body;
-    console.log('data body'+updatedData)
-    console.log(1)
+    console.log('----data body: '+updatedData)
     //trova il match con l'ID fornito
     const match = await Match.findByPk(matchId);
 
-    console.log(2)
     if (!match) {
       return res.status(404).json({ message: 'Match not found' });
     }
 
-    console.log(3)
     //trova il record history_game corrispondente al match_id
     let historyGame = await HistoryGame.findByPk(match.history_match_id);
 
     if (!historyGame) {
       return res.status(404).json({ message: 'History game record not found' });
     }
-    
-    console.log(4)
-
+  
     //aggiorna i dati del record history_game con quelli forniti in input
     historyGame = await historyGame.update(updatedData);
-
     
-    console.log(5)
     //restituisci il record history_game aggiornato
     res.json({historyGame});
   } catch (error) {
