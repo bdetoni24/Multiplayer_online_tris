@@ -45,7 +45,7 @@ export default function Table(props){
       const team = historyGameData[cellKey] || 0; //imposta team a 0 se la chiave non esiste
   
       clickedCells.push({ team });
-      console.log('dati api tradotti in locale')
+      console.log('dati api tradotti in locale: '+clickedCells)
     }
   }
 
@@ -53,6 +53,7 @@ export default function Table(props){
   async function uploadCells(){
     try {
       const apiFormat = convertToHistoryGameFormat(clickedCells);
+      console.log('apiFORMAT data: '+apiFormat)
   
       //eeffettua la richiesta PUT all'API con i dati convertiti
       const response = await axios.put(`http://localhost:5000/api/history-game/putData/${props.matchId}`, apiFormat);
