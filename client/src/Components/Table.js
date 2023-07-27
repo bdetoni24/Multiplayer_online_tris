@@ -115,6 +115,7 @@ export default function Table(props){
 
       //una volta cliccato si fa l'invio dei dati
       uploadCells()
+      props.handleTimeout()
     }
   }
   

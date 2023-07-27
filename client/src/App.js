@@ -82,6 +82,14 @@ export default function App(){
 
   //funzione attivata ad ogni cambio di turno e di secondi rimamenti §(posso integrare tutto dentro un component timer)
   useEffect(() => {
+    if(secondsRemaining===10){
+      //gestisco la parte grafica delle dashboard alla ripartenza del game in local
+      document.getElementById('localTimeBar').style.width = "0px"
+      document.getElementById('localTimeBar').style.animation = "running"
+      document.getElementById('opponentTimeBar').style.animation = "paused"
+      document.getElementById('opponentTimeBar').style.width = '0px'
+    }
+
     if (myTurn && secondsRemaining > 0) {
       timer = setTimeout(() => setSecondsRemaining(secondsRemaining - 1), 1000)
       console.log('secondi rimanenti: '+secondsRemaining)
@@ -104,6 +112,7 @@ export default function App(){
     console.log(response.data.message)
     notMyMove()
 
+    document.getElementById('opponentTimeBar').style.width = "0px"
     document.getElementById('opponentTimeBar').style.animation = "running"
     document.getElementById('localTimeBar').style.animation = "paused"
     document.getElementById('localTimeBar').style.width = '0px'
@@ -282,6 +291,10 @@ export default function App(){
 
     //cambio del cursore
     document.getElementById('mainTable').style.cursor = 'not-allowed'
+    document.getElementById('opponentTimeBar').style.width = "0px"
+    document.getElementById('opponentTimeBar').style.animation = "running"
+    document.getElementById('localTimeBar').style.animation = "paused"
+    document.getElementById('localTimeBar').style.width = '0px'
 
     //far ripartire il polling per vedere se è arrivato il mio turno
     const currentTime = (new Date().getTime())/1000
@@ -309,6 +322,10 @@ export default function App(){
 
     //cambio del puntatore sopra la table
     document.getElementById('mainTable').style.cursor = 'pointer'
+    document.getElementById('opponentTimeBar').style.width = "0px"
+    document.getElementById('opponentTimeBar').style.animation = "paused"
+    document.getElementById('localTimeBar').style.width = '0px'
+    document.getElementById('localTimeBar').style.animation = "running"
 
     //controllo del punteggio
     fetchPoints()
@@ -397,7 +414,7 @@ export default function App(){
         <OpponentPlayerDashBoard opponentPlayerName={opponentPlayerName}/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
-        <Table matchId={matchId} myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
+        <Table handleTimeout={handleTimeout} matchId={matchId} myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
         <ExitButton/>
         <VersionLabel/>
       </div>

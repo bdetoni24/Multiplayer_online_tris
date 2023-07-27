@@ -1,0 +1,2 @@
+-al refresh ripristinare il match
+-alla ricezione dei dati della table devo aggiornare visivamente la table
