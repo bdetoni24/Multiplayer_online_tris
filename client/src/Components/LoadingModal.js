@@ -2,9 +2,9 @@ export default function LoadingModal(props){
     return(
         <div>
             <div id="loadingModal">
-                <img src="./loading.gif"/>
+                <img id="loadingGif" src="./loading.gif"/>
             </div>
-            <p>{props.message}Searching for a game...</p>
+            <p id="labelLoading">{props.message}Searching for a game...</p>
         </div>
     );
 }
