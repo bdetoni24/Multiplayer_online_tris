@@ -1,4 +1,3 @@
-import '../App.css';
 
 export default function SimpleTable(props){
     {/*Posso integrare già qua le funcioni */}

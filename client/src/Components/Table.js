@@ -3,36 +3,91 @@ import '../App.css';
 import SimpleTable from './SimpleTable';
 import RematchButton from './RematchButton';
 import BannerWinner from './BannerWinner';
+import axios from 'axios'
 
 export default function Table(props){
   //variabili e stati
   const [isEndGame,setIsEndGame] = useState(false);
   const [rematchVisible, setRematchVisible] = useState(false)
   const [labelWinner,setLabelWinner] = useState('')
+  const char = 'o'
   const [clickedCells,setClickedCells] = useState([
-    {id:1, clicked:false, team: 0},
-    {id:2, clicked:false, team: 0},
-    {id:3, clicked:false, team: 0},
-    {id:4, clicked:false, team: 0},
-    {id:5, clicked:false, team: 0},
-    {id:6, clicked:false, team: 0},
-    {id:7, clicked:false, team: 0},
-    {id:8, clicked:false, team: 0},
-    {id:9, clicked:false, team: 0},
+    {team: 0},
+    {team: 0},
+    {team: 0},
+    {team: 0},
+    {team: 0},
+    {team: 0},
+    {team: 0},
+    {team: 0},
+    {team: 0},
   ])
+  
   let team=false;
   let nClick=0; //per fermare il game in caso di pareggio
 
-  //funzione che esegue il fetch dei dati delle caselle (per quelle con un dato bisogna chiamare table ckicked)
-  function fetchCells(){
+  //funzione che permette di scaricare i dati delle celle
+  async function downloadCells(){
+    try {
+      const response = await axios.get(`http://localhost:5000/api/history-game/${props.matchId}`);
+      setClickedCells(convertFromHistoryGameFormat(response.data))
+    } catch (error) {
+      console.error('Error while fetching history game record:', error);
+    }
+  }
+  
+  //traduce i dati dellì'api in quelli in locale
+  function convertFromHistoryGameFormat(historyGameData) {
+    clickedCells = [];
+  
+    for (let i = 0; i < 9; i++) {
+      const cellKey = `status_cell${i + 1}`;
+      const team = historyGameData[cellKey] || 0; //imposta team a 0 se la chiave non esiste
+  
+      clickedCells.push({ team });
+      console.log('dati api tradotti in locale')
+    }
+  }
 
+  //funzione che invia i dati delle celle attuali UPLOAD
+  async function uploadCells(){
+    try {
+      const apiFormat = convertToHistoryGameFormat(clickedCells);
+  
+      //eeffettua la richiesta PUT all'API con i dati convertiti
+      const response = await axios.put(`http://localhost:5000/api/history-game/putData/${props.matchId}`, apiFormat);
+      console.log('History game record updated successfully');
+    } catch (error) {
+      console.error('Error while updating history game record:', error);
+    }
+  }
+
+
+  //traduce la rappresentazione dei dati in locale in un vormato leggibile per l'api
+  function convertToHistoryGameFormat() {
+    const historyGameData = {};
+  
+    for (let i = 0; i < clickedCells.length; i++) {
+      const cellKey = `status_cell${i + 1}`;
+      historyGameData[cellKey] = clickedCells[i].team;
+      console.log('dati locali tradotti in  formato api')
+    }
+  
+    return historyGameData;
+  }
+
+  function isCellClicked(nCell){
+    let ret=false;
+    if(clickedCells[nCell].team!=0){
+      ret=true
+    }
+    return ret
   }
   
   //funzione per preparare il gioco ad una nuova partita
   function tableRematch(){
     for(let i=0;i<=8;i++){
       clickedCells[i].team=0;
-      clickedCells[i].clicked=false;
       let cell = document.getElementById((i+1).toString())
       cell.innerHTML = '';
       cell.style.backgroundColor = "white"
@@ -46,29 +101,20 @@ export default function Table(props){
  
   //gestisce il click di una qualsiasi cella
   function tableClicked(nCella){
-    if((!clickedCells[nCella-1].clicked && !isEndGame) && props.myTurn){
+    //controlli per vedere se il gioco è finito
+    if((!isCellClicked(nCella-1) && !isEndGame) && props.myTurn){
       nClick++;
-      clickedCells[nCella-1].clicked=true;
       team =! team;
-      let char;
       let cell = document.getElementById(nCella)
 
-      //se ha cliccato il team 'O'
-      if(team){
-        char="o";
-        clickedCells[nCella-1].team=1;
-        cell.style.color = "green"
-        checkWinner(1,"green");
-      }
-      //se ha cliccato il team 'X'
-      else{
-        char="x";
-        clickedCells[nCella-1].team=2;
-        cell.style.color = "red"
-        checkWinner(2,"red");
-      }
-
+      //modifica grafica al click
+      clickedCells[nCella-1].team=1;
+      cell.style.color = "green"
+      checkWinner(1,"green");
       cell.innerHTML = char
+
+      //una volta cliccato si fa l'invio dei dati
+      uploadCells()
     }
   }
   
@@ -183,7 +229,7 @@ export default function Table(props){
 
     //fa diventare le celle di colore grigio quando ci si passa sopra
     function mouseOverCell(nCell){
-      if((!clickedCells[nCell-1].clicked && !isEndGame) && props.myTurn){
+      if((!isCellClicked(nCell-1) && !isEndGame) && props.myTurn){
         document.getElementById(nCell.toString()).style.backgroundColor = '#CACACA';
       }
     }

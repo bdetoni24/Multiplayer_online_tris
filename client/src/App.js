@@ -397,7 +397,7 @@ export default function App(){
         <OpponentPlayerDashBoard opponentPlayerName={opponentPlayerName}/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
-        <Table myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
+        <Table matchId={matchId} myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
         <ExitButton/>
         <VersionLabel/>
       </div>

@@ -180,6 +180,74 @@ Match.belongsTo(Player, { foreignKey: 'player1_id', as: 'player1' });
 Match.belongsTo(Player, { foreignKey: 'player2_id', as: 'player2' });
 Match.hasOne(HistoryGame, { foreignKey: 'match_id', as: 'historyGame' });
 
+//api che permette di inviare i dati della table
+app.put('/api/history-game/putData/:match_id', async (req,res)=> {
+  console.log("START SENDING DATA TABLE")
+  try {
+    const matchId = req.params.match_id;
+    const updatedData = req.body;
+    console.log('data body'+updatedData)
+    console.log(1)
+    //trova il match con l'ID fornito
+    const match = await Match.findByPk(matchId);
+
+    console.log(2)
+    if (!match) {
+      return res.status(404).json({ message: 'Match not found' });
+    }
+
+    console.log(3)
+    //trova il record history_game corrispondente al match_id
+    let historyGame = await HistoryGame.findByPk(match.history_match_id);
+
+    if (!historyGame) {
+      return res.status(404).json({ message: 'History game record not found' });
+    }
+    
+    console.log(4)
+
+    //aggiorna i dati del record history_game con quelli forniti in input
+    historyGame = await historyGame.update(updatedData);
+
+    
+    console.log(5)
+    //restituisci il record history_game aggiornato
+    res.json({historyGame});
+  } catch (error) {
+    console.error('Error while updating history game record:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//api che restituisce il valore di ogni cella dato historymatchId
+app.get('/api/history-game/:match_id', async (req, res) => {
+  try {
+    const matchId = req.params.match_id;
+
+    //cerca il match
+    const match = await Match.findByPk(matchId);
+
+    //guarda se non c'è un match
+    if (!match) {
+      return res.status(404).json({ message: 'Match not found' });
+    }
+
+    //trova il record history_game corrispondente al match_id
+    const historyGame = await HistoryGame.findByPk(match.history_match_id);
+
+    if (!historyGame) {
+      return res.status(404).json({ message: 'History game record not found' });
+    }
+
+    //restituisci il record history_game
+    res.json(historyGame);
+  } catch (error) {
+    console.error('Error while fetching history game record:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 //api che dato il match id restituisca il punteggio di p1 che di p2
 app.get('/api/match/getPoints/:match_id', async (req, res) => {
   const { match_id } = req.params;
