@@ -32,19 +32,21 @@ function Table(props,ref){
     //tableRematch()
 
     //impostare il click per ogni cella
-    nClick++;
+    nClick=0;
 
     //modifica grafica al click
     for(let i=0;i<9;i++){
       let cell = document.getElementById(i)
       if(cells[i]==1){
         //cella cliccata dal primo player (lcoal)
+        nClick++
         cell.style.color = "green"
         checkWinner(1,"green"); //sarebbe da fare da server
         cell.innerHTML = "o"
       }
       else if(cells[i]==2){
         //cella cliccata dall'opponent 
+        nClick++
         cell.style.color = "red"
         checkWinner(2,"red"); //sarebbe da fare da server
         cell.innerHTML = "x"
@@ -123,8 +125,10 @@ function Table(props,ref){
       cell.style.backgroundColor = "white"
     }
 
+    uploadCells()
     setIsEndGame(false);
     nClick=0;
+    setIsStartGameApi()
     setRematchVisible(false)
     setLabelWinner('')
   }
@@ -209,58 +213,73 @@ function Table(props,ref){
         document.getElementById("9").style.color="white"
       }
       //Combinazioni diagonali
-       if(Object.is(cells[0], team) && Object.is(cells[4], team) && Object.is(cells[8], team)){
-          ret=true
-          document.getElementById("1").style.backgroundColor=color
-          document.getElementById("5").style.backgroundColor=color
-          document.getElementById("9").style.backgroundColor=color
-          document.getElementById("1").style.color="white"
-          document.getElementById("5").style.color="white"
-          document.getElementById("9").style.color="white"
-        }
-        if(Object.is(cells[2], team) && Object.is(cells[4], team) && Object.is(cells[6], team)){
-          ret=true
-          document.getElementById("3").style.backgroundColor=color
-          document.getElementById("5").style.backgroundColor=color
-          document.getElementById("7").style.backgroundColor=color
-          document.getElementById("3").style.color="white"
-          document.getElementById("5").style.color="white"
-          document.getElementById("7").style.color="white"
+      if(Object.is(cells[0], team) && Object.is(cells[4], team) && Object.is(cells[8], team)){
+        ret=true
+        document.getElementById("1").style.backgroundColor=color
+        document.getElementById("5").style.backgroundColor=color
+        document.getElementById("9").style.backgroundColor=color
+        document.getElementById("1").style.color="white"
+        document.getElementById("5").style.color="white"
+        document.getElementById("9").style.color="white"
+      }
+      if(Object.is(cells[2], team) && Object.is(cells[4], team) && Object.is(cells[6], team)){
+        ret=true
+        document.getElementById("3").style.backgroundColor=color
+        document.getElementById("5").style.backgroundColor=color
+        document.getElementById("7").style.backgroundColor=color
+        document.getElementById("3").style.color="white"
+        document.getElementById("5").style.color="white"
+        document.getElementById("7").style.color="white"
+      }
+
+      //Caso di pareggio
+      if((nClick===9)&&!ret){
+        setIsEndGame(true)
+        setLabelWinner('Pareggio')
+        setRematchVisible(true)
+      }
+      
+      //Caso di vittoria
+      if (ret){
+        setIsEndGame(true);
+        setIsEndGameApi()
+
+        //se ha vinto il team 'O'
+        if(team===1){
+          props.newOWin()
+          setLabelWinner('Ha vinto O')
         }
 
-        //Caso di pareggio
-        if((nClick===9)&&!ret){
-          setIsEndGame(true)
-          setLabelWinner('Pareggio')
-          setRematchVisible(true)
+        //se ha vinto il team 'X'
+        else{
+          props.newXWin()
+          setLabelWinner('Ha vinto X')
         }
-        
-        //Caso di vittoria
-        if (ret){
-          setIsEndGame(true);
-          setIsEndGameApi()
 
-          //se ha vinto il team 'O'
-          if(team===1){
-            props.newOWin()
-            setLabelWinner('Ha vinto O')
-          }
-
-          //se ha vinto il team 'X'
-          else{
-            props.newXWin()
-            setLabelWinner('Ha vinto X')
-          }
-
-          //mostra il bottone per aprire una nuova partita
-          setRematchVisible(true)
-        }
+        //mostra il bottone per aprire una nuova partita
+        setRematchVisible(true)
       }
     }
+  }
 
     //funzione che chiude il game
     async function setIsEndGameApi(){
-      
+      try{
+        const response = await axios.put(`http://localhost:5000/api/matches/${props.matchId}/set-end-game`)
+      }
+      catch(error){
+        console.error(error)
+      }
+    }
+
+    //funzione che apre il game
+    async function setIsStartGameApi(){
+      try{
+        const response = await axios.put(`http://localhost:5000/api/matches/${props.matchId}/set-start-game`)
+      }
+      catch(error){
+        console.error(error)
+      }
     }
 
     //fa diventare le celle di colore grigio quando ci si passa sopra
