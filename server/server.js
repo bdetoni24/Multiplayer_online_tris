@@ -180,6 +180,106 @@ Match.belongsTo(Player, { foreignKey: 'player1_id', as: 'player1' });
 Match.belongsTo(Player, { foreignKey: 'player2_id', as: 'player2' });
 Match.hasOne(HistoryGame, { foreignKey: 'match_id', as: 'historyGame' });
 
+//funzione che imposta il inizio MATCH
+app.put('/api/matches/:match_id/set-start-match', async (req, res) => { //works
+  try {
+    const { match_id } = req.params;
+
+    //cerca il record del match corrispondente
+    const match = await Match.findByPk(match_id);
+
+    if (!match) {
+      return res.status(404).json({ error: 'Match not found' });
+    }
+
+    //imposta "is_end_match" su true
+    match.is_end_match = false;
+
+    //salva le modifiche nel database
+    await match.save();
+
+    return res.json({ message: 'is_end_match updated successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+//funzione che imposta il fine MATCH
+app.put('/api/matches/:match_id/set-end-match', async (req, res) => { //works
+  try {
+    const { match_id } = req.params;
+
+    //cerca il record del match corrispondente
+    const match = await Match.findByPk(match_id);
+
+    if (!match) {
+      return res.status(404).json({ error: 'Match not found' });
+    }
+
+    //imposta "is_end_game" su true
+    match.is_end_match = true;
+
+    //salva le modifiche nel database
+    await match.save();
+
+    return res.json({ message: 'is_end_match updated successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+//funzione che imposta il inizio GAME
+app.put('/api/matches/:match_id/set-start-game', async (req, res) => { //works
+  try {
+    const { match_id } = req.params;
+
+    //cerca il record del match corrispondente
+    const match = await Match.findByPk(match_id);
+
+    if (!match) {
+      return res.status(404).json({ error: 'Match not found' });
+    }
+
+    //imposta "is_end_game" su true
+    match.is_end_game = false;
+
+    //salva le modifiche nel database
+    await match.save();
+
+    return res.json({ message: 'is_end_game updated successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+//funzione che imposta il fine GAME
+app.put('/api/matches/:match_id/set-end-game', async (req, res) => { //workd
+  try {
+    const { match_id } = req.params;
+
+    //cerca il record del match corrispondente
+    const match = await Match.findByPk(match_id);
+
+    if (!match) {
+      return res.status(404).json({ error: 'Match not found' });
+    }
+
+    //imposta "is_end_game" su true
+    match.is_end_game = true;
+
+    //salva le modifiche nel database
+    await match.save();
+
+    return res.json({ message: 'is_end_game updated successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 //funzione che cambia il matchId
 app.put('api/players/updatePartyId/:player_id', async (req, res) => {
   try {

@@ -26,6 +26,38 @@ function Table(props,ref){
     console.log('cells modified: '+cells)
   },[cells])
 
+  //funzione che prende l'array e cambia gli stati delle celle visive
+  function fetchTable(){
+    //resettare la tabella (lo dovrebbe fare in automatico)
+    //tableRematch()
+
+    //impostare il click per ogni cella
+    nClick++;
+
+    //modifica grafica al click
+    for(let i=0;i<9;i++){
+      let cell = document.getElementById(i)
+      if(cells[i]==1){
+        //cella cliccata dal primo player (lcoal)
+        cell.style.color = "green"
+        checkWinner(1,"green"); //sarebbe da fare da server
+        cell.innerHTML = "o"
+      }
+      else if(cells[i]==2){
+        //cella cliccata dall'opponent 
+        cell.style.color = "red"
+        checkWinner(2,"red"); //sarebbe da fare da server
+        cell.innerHTML = "x"
+      }
+      else if(cells[i]==0){
+        //se nessuno ha cliccato la cella
+        cell.style.color = "white"
+        //checkWinner(1,"red");
+        cell.innerHTML = ""
+      }
+    }
+  }
+
   //funzione che permette di scaricare i dati delle celle
   async function downloadCells(){
     try {
@@ -102,7 +134,6 @@ function Table(props,ref){
     //controlli per vedere se il gioco è finito
     if((!isCellClicked(nCella-1) && !isEndGame) && props.myTurn){
       nClick++;
-      team =! team;
       let cell = document.getElementById(nCella)
 
       //modifica grafica al click
@@ -207,6 +238,7 @@ function Table(props,ref){
         //Caso di vittoria
         if (ret){
           setIsEndGame(true);
+          setIsEndGameApi()
 
           //se ha vinto il team 'O'
           if(team===1){
@@ -224,6 +256,11 @@ function Table(props,ref){
           setRematchVisible(true)
         }
       }
+    }
+
+    //funzione che chiude il game
+    async function setIsEndGameApi(){
+      
     }
 
     //fa diventare le celle di colore grigio quando ci si passa sopra
