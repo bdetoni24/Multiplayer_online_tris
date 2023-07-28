@@ -32,10 +32,15 @@ function Table(props,ref){
       const response = await axios.get(`http://localhost:5000/api/history-game/${props.matchId}`);
 
       //converto da json ad array statico
-      const jsonString = response.data
-      const jsonObject = JSON.parse(jsonString)
-      const cellArray = Object.values(jsonObject)
-      setCells(cellArray)
+      cells[0] = response.data.status_cell1 ? response.data.status_cell1 : 0
+      cells[1] = response.data.status_cell2 ? response.data.status_cell2 : 0
+      cells[2] = response.data.status_cell3 ? response.data.status_cell3 : 0
+      cells[3] = response.data.status_cell4 ? response.data.status_cell4 : 0
+      cells[4] = response.data.status_cell5 ? response.data.status_cell5 : 0
+      cells[5] = response.data.status_cell6 ? response.data.status_cell6 : 0
+      cells[6] = response.data.status_cell7 ? response.data.status_cell7 : 0
+      cells[7] = response.data.status_cell8 ? response.data.status_cell8 : 0
+      cells[8] = response.data.status_cell9 ? response.data.status_cell9 : 0
       console.log("---DOWNLOAD (json to local): "+cells)
     } catch (error) {
       console.error('Error while fetching history game record:', error);
