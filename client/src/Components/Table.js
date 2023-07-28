@@ -46,18 +46,6 @@ function Table(props,ref){
       console.error('Error while fetching history game record:', error);
     }
   }
-  
-  //traduce i dati dellì'api in quelli in locale
-  /*function convertFromHistoryGameFormat(historyGameData) { //TESTATA
-    setCells([0,0,0,0,0,0,0,0,0]);
-  
-    for (let i = 0; i < 9; i++) {
-      const cellKey = `status_cell${i + 1}`;
-      const team = historyGameData[cellKey] || 0; //imposta team a 0 se la chiave non esiste
-      cells[i]=team;
-    }
-    console.log('dati api tradotti in locale: '+cells)
-  }*/
 
   //funzione che invia i dati delle celle attuali UPLOAD (non modifica cells)
   async function uploadCells(){
@@ -83,21 +71,6 @@ function Table(props,ref){
       console.error('Error while updating history game record:', error);
     }
   }
-
-
-  //traduce la rappresentazione dei dati in locale in un vormato leggibile per l'api
-  /*function convertToHistoryGameFormat() {
-    const historyGameData = {};
-  
-    for (let i = 0; i < cells.length; i++) {
-      const cellKey = `status_cell${i + 1}`;
-      historyGameData[cellKey] = cells[i];
-    }
-    
-    console.log('dati locali tradotti in  formato api: '+JSON.stringify(historyGameData)) //mi esce Object
-  
-    return JSON.stringify(historyGameData);
-  }*/
 
   function isCellClicked(nCell){
     console.log("frutta e verdura: "+cells)
