@@ -15,8 +15,6 @@ function Table(props,ref){
   const [labelWinner,setLabelWinner] = useState('')
   const char = 'o'
   let [cells,setCells] = useState([0,0,0,0,0,0,0,0,0])
-  
-  let team=false;
   let nClick=0; //per fermare il game in caso di pareggio
 
   //collega App con Table
@@ -36,7 +34,7 @@ function Table(props,ref){
 
     //modifica grafica al click
     for(let i=0;i<9;i++){
-      let cell = document.getElementById(i)
+      let cell = document.getElementById(i+'')
       if(cells[i]==1){
         //cella cliccata dal primo player (lcoal)
         nClick++
@@ -53,9 +51,9 @@ function Table(props,ref){
       }
       else if(cells[i]==0){
         //se nessuno ha cliccato la cella
-        cell.style.color = "white"
+        //cell.style.color = "white"
         //checkWinner(1,"red");
-        cell.innerHTML = ""
+        //cell.innerHTML = ""
       }
     }
   }
@@ -76,6 +74,7 @@ function Table(props,ref){
       cells[7] = response.data.status_cell8 ? response.data.status_cell8 : 0
       cells[8] = response.data.status_cell9 ? response.data.status_cell9 : 0
       console.log("---DOWNLOAD (json to local): "+cells)
+      fetchTable()
     } catch (error) {
       console.error('Error while fetching history game record:', error);
     }
@@ -99,17 +98,22 @@ function Table(props,ref){
       console.log('--UPLOAD (local to json): '+jsonString)
   
       //eeffettua la richiesta PUT all'API con i dati convertiti
-      const response = await axios.put(`http://localhost:5000/api/history-game/putData/${props.matchId}`, jsonString);
+      const response = await axios.put(`http://localhost:5000/api/history-game/putData/${props.matchId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonString,
+      });
       console.log('History game record updated successfully');
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error while updating history game record:', error);
     }
   }
 
   function isCellClicked(nCell){
-    console.log("frutta e verdura: "+cells)
     let ret=false;
-    console.log('controllo che la cella di indice '+nCell+" sia cliccata "+cells[nCell])
+    console.log('controllo che la cella di indice '+nCell+" sia cliccata, value"+cells[nCell])
     if(cells[nCell]!==0){
       ret=true
     }
@@ -141,7 +145,7 @@ function Table(props,ref){
       let cell = document.getElementById(nCella)
 
       //modifica grafica al click
-      cells[nCella-1]=1;
+      cells[nCella-1]=props.team;
       cell.style.color = "green"
       checkWinner(1,"green");
       cell.innerHTML = char

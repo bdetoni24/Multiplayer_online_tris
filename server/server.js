@@ -310,7 +310,7 @@ app.put('/api/history-game/putData/:match_id', async (req,res)=> {
   try {
     const matchId = req.params.match_id;
     const updatedData = req.body;
-    console.log('----data body: '+updatedData)
+    console.log('-------data body: '+updatedData)
     //trova il match con l'ID fornito
     const match = await Match.findByPk(matchId);
 

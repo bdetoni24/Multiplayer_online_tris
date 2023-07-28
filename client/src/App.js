@@ -32,6 +32,8 @@ export default function App(){
   const history = window.history;
   const tableRef = useRef(null)
   let timer
+  const [team,setTeam] = useState(-1)
+  
 
   //funzione post caricamento pagina
   useEffect(() => { //FARE CONTROLLO CHE NON SIA GIà DENTRO UN MATCH
@@ -79,7 +81,7 @@ export default function App(){
 
   //funzione che effettua il scaricamento dei dati dallpai con Context di Table
   function downloadCellsTable(){
-    console.log("Data upload cells from App using Context")
+    console.log("LOLOLOLOLOLOLOLOLO-- Data upload cells from App using Context")
     if(tableRef.current){
       tableRef.current.downloadCells()
     }
@@ -190,6 +192,7 @@ export default function App(){
         history.pushState({}, null, url2);
         myMove()
         unBlurAll()
+        setTeam(1)
       }
       else{
         console.log("Match NON creato")
@@ -240,6 +243,7 @@ export default function App(){
             setOpponentPlayerName(response3.data.nickname)
             setOpponentPlayerId(opponentPlayerId)
             setShowLoadingModal(false)
+            setTeam(2)
 
             //cambio schermata
             unBlurAll()
@@ -426,7 +430,7 @@ export default function App(){
         <OpponentPlayerDashBoard opponentPlayerName={opponentPlayerName}/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
-        <Table ref={tableRef} handleTimeout={handleTimeout} matchId={matchId} myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
+        <Table team={team} ref={tableRef} handleTimeout={handleTimeout} matchId={matchId} myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
         <ExitButton/>
         <VersionLabel/>
       </div>
