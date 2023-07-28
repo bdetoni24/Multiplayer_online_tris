@@ -11,6 +11,7 @@ import ExitButton from './Components/ExitButton.js'
 import LoginModal from './Components/LoginModal.js'
 import Table from './Components/Table.js'
 import axios from 'axios'
+import { useRef } from 'react'
 import './App.css'
 
 export default function App(){
@@ -29,6 +30,7 @@ export default function App(){
   const [secondsRemaining,setSecondsRemaining] = useState(10)
   const url2 = new URL('http://localhost:3000/')
   const history = window.history;
+  const tableRef = useRef(null)
   let timer
 
   //funzione post caricamento pagina
@@ -75,7 +77,13 @@ export default function App(){
     console.log("---end INITIALIZATION---")
   },[])
 
-
+  //funzione che effettua il scaricamento dei dati dallpai con Context di Table
+  function downloadCellsTable(){
+    console.log("Data upload cells from App using Context")
+    if(tableRef.current){
+      tableRef.current.downloadCells()
+    }
+  }
 
   //funzione attivata ad ogni cambiamento di localPlayerId
   useEffect(() => {
@@ -113,6 +121,8 @@ export default function App(){
     const response = await axios.post(`http://localhost:5000/api/matches/${matchId}/update-player-turn/${opponentPlayerId}`)
     console.log(response.data.message)
     notMyMove()
+    downloadCellsTable()
+
 
     document.getElementById('opponentTimeBar').style.width = "0px"
     document.getElementById('opponentTimeBar').style.animation = "running"
@@ -416,7 +426,7 @@ export default function App(){
         <OpponentPlayerDashBoard opponentPlayerName={opponentPlayerName}/>
         <h1 id="mainTitle">Tris Game</h1>
         <RecordTable xWins={xWin} oWins={oWin}/>
-        <Table handleTimeout={handleTimeout} matchId={matchId} myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
+        <Table ref={tableRef} handleTimeout={handleTimeout} matchId={matchId} myTurn={myTurn} newXWin={newXWin} newOWin={newOWin}/>
         <ExitButton/>
         <VersionLabel/>
       </div>
