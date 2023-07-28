@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import '../App.css';
 import SimpleTable from './SimpleTable';
 import RematchButton from './RematchButton';
@@ -22,37 +22,57 @@ function Table(props,ref){
   //collega App con Table
   useImperativeHandle(ref, () => ({downloadCells,}))
 
+  useEffect(() => {
+    console.log('cells modified: '+cells)
+  },[cells])
+
   //funzione che permette di scaricare i dati delle celle
   async function downloadCells(){
     try {
       const response = await axios.get(`http://localhost:5000/api/history-game/${props.matchId}`);
-      setCells(convertFromHistoryGameFormat(response.data))
+
+      //converto da json ad array statico
+      const jsonString = response.data
+      const jsonObject = JSON.parse(jsonString)
+      const cellArray = Object.values(jsonObject)
+      setCells(cellArray)
+      console.log("---DOWNLOAD (json to local): "+cells)
     } catch (error) {
       console.error('Error while fetching history game record:', error);
     }
   }
   
   //traduce i dati dellì'api in quelli in locale
-  function convertFromHistoryGameFormat(historyGameData) { //TESTATA
+  /*function convertFromHistoryGameFormat(historyGameData) { //TESTATA
     setCells([0,0,0,0,0,0,0,0,0]);
   
     for (let i = 0; i < 9; i++) {
       const cellKey = `status_cell${i + 1}`;
       const team = historyGameData[cellKey] || 0; //imposta team a 0 se la chiave non esiste
-  
       cells[i]=team;
     }
     console.log('dati api tradotti in locale: '+cells)
-  }
+  }*/
 
-  //funzione che invia i dati delle celle attuali UPLOAD
+  //funzione che invia i dati delle celle attuali UPLOAD (non modifica cells)
   async function uploadCells(){
     try {
-      const apiFormat = convertToHistoryGameFormat(cells);
-      console.log('apiFORMAT data: '+apiFormat)
+      //converto l'array in formato json
+      const jsonString = JSON.stringify({
+        status_cell1: cells[0],
+        status_cell2: cells[1],
+        status_cell3: cells[2],
+        status_cell4: cells[3],
+        status_cell5: cells[4],
+        status_cell6: cells[5],
+        status_cell7: cells[6],
+        status_cell8: cells[7],
+        status_cell9: cells[8],
+      });
+      console.log('--UPLOAD (local to json): '+jsonString)
   
       //eeffettua la richiesta PUT all'API con i dati convertiti
-      const response = await axios.put(`http://localhost:5000/api/history-game/putData/${props.matchId}`, apiFormat);
+      const response = await axios.put(`http://localhost:5000/api/history-game/putData/${props.matchId}`, jsonString);
       console.log('History game record updated successfully');
     } catch (error) {
       console.error('Error while updating history game record:', error);
@@ -61,7 +81,7 @@ function Table(props,ref){
 
 
   //traduce la rappresentazione dei dati in locale in un vormato leggibile per l'api
-  function convertToHistoryGameFormat() {
+  /*function convertToHistoryGameFormat() {
     const historyGameData = {};
   
     for (let i = 0; i < cells.length; i++) {
@@ -72,7 +92,7 @@ function Table(props,ref){
     console.log('dati locali tradotti in  formato api: '+JSON.stringify(historyGameData)) //mi esce Object
   
     return JSON.stringify(historyGameData);
-  }
+  }*/
 
   function isCellClicked(nCell){
     console.log("frutta e verdura: "+cells)
