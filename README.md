@@ -1,2 +1,2 @@
 # Multiplayer online tris
-I'm trying to create a multiplayer online version of the Tris Game witch i had preaovusly created before in another repository.
+It's an online version of the Tris game which i already created in another repository (https://github.com/bdetoni24/TrisGame/tree/main)
